@@ -739,7 +739,7 @@ main > section.pull { width: 100%; margin-top: clamp(5rem, 10vw, 8rem); position
 .needle { transform-origin: 150px 160px; transform: rotate(-90deg); }
 .needle line { stroke: var(--alerta); stroke-width: 5; stroke-linecap: round; }
 .needle circle { fill: var(--cobre); }
-.meter.go .needle { animation: needle 2.6s cubic-bezier(.5, 0, .2, 1) forwards, needleShake .09s linear 2.6s infinite; }
+.meter.measuring .needle { animation: needle 2.6s cubic-bezier(.5, 0, .2, 1) forwards, needleShake .09s linear 2.6s infinite; }
 @keyframes needle { 0% { transform: rotate(-90deg); } 40% { transform: rotate(10deg); } 50% { transform: rotate(-20deg); } 100% { transform: rotate(128deg); } }
 @keyframes needleShake { 0%, 100% { transform: rotate(126deg); } 50% { transform: rotate(131deg); } }
 .meter-k { font-family: var(--f-mono); font-size: 1.1rem; text-transform: uppercase; letter-spacing: .08em; color: var(--campo); margin-bottom: .3rem; }
@@ -943,7 +943,7 @@ main > section.news { width: min(1140px, 94vw); }
   mix-blend-mode: multiply;
 }
 .np-photo-lead .halftone { aspect-ratio: 4 / 5; }
-.np-photo-lead .halftone img { object-position: 50% 6%; filter: grayscale(1) contrast(1.25) brightness(1.3) sepia(.2); }
+.np-photo-lead .halftone img { object-position: 50% 20%; filter: grayscale(1) contrast(1.3) brightness(1.12) sepia(.2); }
 
 .np-lead { position: relative; padding: 1.1rem 0 1.3rem; border-bottom: 3px solid var(--np-ink); }
 .np-head-xl { font-family: var(--f-head); font-weight: 900; font-size: clamp(2.4rem, 1.2rem + 6vw, 5.6rem); line-height: .92; letter-spacing: -.025em; margin-bottom: .8rem; text-wrap: balance; }
@@ -989,7 +989,7 @@ main > section.news { width: min(1140px, 94vw); }
   .np-dateline { display: grid; grid-template-columns: 1fr 1fr; row-gap: .25rem; letter-spacing: .05em; }
   .np-dateline #npDate { grid-column: 1 / -1; order: -1; text-align: center; border-bottom: 1px solid var(--np-rule); padding-bottom: .3rem; }
   .np-dateline span:last-child { text-align: right; }
-  .np-photo-lead .halftone { aspect-ratio: 4 / 3.4; }
+  .np-photo-lead .halftone { aspect-ratio: 4 / 5; }
   .np-stamp { top: 0; }
 }
 @media (min-width: 760px) {
@@ -1262,7 +1262,7 @@ main > section.news { width: min(1140px, 94vw); }
   .js [data-reveal] { opacity: 1; transform: none; filter: none; }
   .js .story { opacity: 1; }
   .np-stamp { opacity: .9; }
-  .meter.go .needle { animation: none; transform: rotate(128deg); }
+  .meter.measuring .needle { animation: none; transform: rotate(128deg); }
   .js .rubber span { transform: none; }
 }
 

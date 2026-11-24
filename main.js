@@ -873,7 +873,7 @@
       if (!e.isIntersecting) return;
       meterIO.disconnect();
       setTimeout(() => {
-        meter.classList.add("go");
+        meter.classList.add("measuring");
         const start = performance.now();
         const dur = reduceMotion ? 1 : 2600;
         const tick = (now) => {
