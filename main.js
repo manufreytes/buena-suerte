@@ -550,6 +550,48 @@
   }
 
   /* ---------------------------------------------------------
+     4 BIS · SIMULACRO DE COLOQUIO
+     --------------------------------------------------------- */
+  const oralVideo = $("#oralVideo"), oralSound = $("#oralSound");
+  const muteVideo = (v, btn, label) => {
+    if (!v || v.muted) return;
+    v.muted = true;
+    btn.setAttribute("aria-pressed", "false");
+    $(".yp-sound-txt", btn).textContent = label;
+  };
+  if (oralVideo) {
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { if (!reduceMotion || !oralVideo.muted) oralVideo.play().catch(() => {}); }
+      else oralVideo.pause();
+    }, { threshold: 0.3 }).observe(oralVideo);
+    oralSound.addEventListener("click", (e) => {
+      const on = oralVideo.muted;
+      if (on && ypVideo) muteVideo(ypVideo, ypSound, "escuchar la declaración");
+      oralVideo.muted = !on;
+      oralSound.setAttribute("aria-pressed", String(on));
+      $(".yp-sound-txt", oralSound).textContent = on ? "exponiendo" : "escuchar la exposición";
+      if (on) {
+        oralVideo.currentTime = 0;
+        oralVideo.play().catch(() => {});
+        burst(e.clientX, e.clientY, { n: 12 });
+      }
+    });
+  }
+  if (ypSound && oralVideo) {
+    ypSound.addEventListener("click", () => { if (!ypVideo.muted) muteVideo(oralVideo, oralSound, "escuchar la exposición"); });
+  }
+
+  // la rúbrica se corrige de a un ítem
+  const rubricList = $("#rubricList");
+  if (rubricList) {
+    new IntersectionObserver(([e], obs) => {
+      if (!e.isIntersecting) return;
+      obs.disconnect();
+      $$("li", rubricList).forEach((li, i) => setTimeout(() => li.classList.add("in"), reduceMotion ? 0 : 400 + i * 520));
+    }, { threshold: 0.3 }).observe(rubricList);
+  }
+
+  /* ---------------------------------------------------------
      2 · ENSAYO DE TRACCIÓN — el gran momento
      --------------------------------------------------------- */
   const pull = $("#pull");
