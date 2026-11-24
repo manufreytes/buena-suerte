@@ -809,6 +809,8 @@
   const closeWin = () => { if (win) win.hidden = true; clearTimeout(winTimer); };
   const showWin = () => {
     if (!win) return;
+    const mr = $("#meter").getBoundingClientRect();
+    if (mr.bottom < 0 || mr.top > window.innerHeight) return; // ya te fuiste: no molesta
     win.hidden = false;
     zap();
     winTimer = setTimeout(closeWin, 9000);
