@@ -128,7 +128,6 @@
         </article>
 
         <figure class="yp" id="yopuedo" data-reveal="pop">
-          <p class="yp-shout" aria-hidden="true"><span>¡Yo</span><span>puedo!</span></p>
           <div class="yp-frame">
             <span class="yp-live" aria-hidden="true"><i class="dot"></i> REC</span>
             <video id="ypVideo" src="video/yo-puedo.mp4" poster="video/yo-puedo-poster.jpg"
@@ -140,6 +139,7 @@
               <span class="yp-sound-txt">escuchar la declaración</span>
             </button>
           </div>
+          <p class="yp-shout" aria-hidden="true"><span>¡Yo</span><span>puedo!</span></p>
           <figcaption>Registro audiovisual. Declaración espontánea de la muestra.</figcaption>
           <p class="hand yp-note">se presentó sola.<br />nadie le preguntó.</p>
         </figure>
@@ -155,7 +155,7 @@
           <p class="hand pull-nope" aria-hidden="true">(no se pudo)</p>
         </header>
 
-        <p class="sr-only">Una máquina de ensayo estira el nombre Victorio a medida que scrolleás. El nombre se estira hasta novecientos por ciento sin romperse; lo que se rompe es la máquina.</p>
+        <p class="sr-only">Apretá el botón Iniciar ensayo: la máquina estira el nombre Victorio hasta novecientos por ciento sin romperlo; lo que se rompe es la máquina.</p>
 
         <div class="rig" id="rig" aria-hidden="true">
           <canvas class="ruler" id="ruler"></canvas>
@@ -169,14 +169,21 @@
           <div class="pull-stamp" id="pullStamp"><span>No se rompe</span></div>
         </div>
 
-        <div class="panel" aria-hidden="true">
-          <div class="plate"><b>Tensiómetro<span class="hide-m"> Comité</span> Mod.&nbsp;1</b><span>garantía vencida</span><i class="lamp" id="lamp"></i></div>
-          <div class="lcd2">
+        <div class="panel">
+          <div class="plate" aria-hidden="true"><b>Tensiómetro<span class="hide-m"> Comité</span> Mod.&nbsp;1</b><span>garantía vencida</span><i class="lamp" id="lamp"></i></div>
+          <div class="lcd2" aria-hidden="true">
             <p><span>fuerza</span><b id="lcdF">0 N</b></p>
             <p><span>elongación</span><b id="lcdE">0 %</b></p>
             <p><span>rotura estimada</span><b id="lcdR">30 %</b></p>
           </div>
-          <p class="pull-status" id="pullStatus">Sujetando muestra.</p>
+          <p class="pull-status" id="pullStatus" aria-live="polite">Muestra sujeta. Falta que aprietes el botón rojo.</p>
+          <div class="go-wrap">
+            <button class="go" id="pullGo" type="button">
+              <span class="go-cap"><span id="pullGoTxt">Iniciar<br />ensayo</span></span>
+              <span class="go-base" aria-hidden="true"></span>
+            </button>
+            <p class="hand go-hint" aria-hidden="true">apretá.<br />no pasa nada.<br /><small>(pasa algo)</small></p>
+          </div>
         </div>
         <p class="hand pull-note" aria-hidden="true">subestimamos<br />a la muestra</p>
       </div>

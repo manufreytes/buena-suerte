@@ -124,29 +124,38 @@
 
   // crujido continuo de la máquina, atado a la tensión
   let creak = null;
+  function creakStop() {
+    if (!creak) return;
+    const c = creak; creak = null;
+    const t = c.ctx.currentTime;
+    c.g.gain.cancelScheduledValues(t);
+    c.g.gain.setValueAtTime(c.g.gain.value, t);
+    c.g.gain.linearRampToValueAtTime(0, t + 0.06);
+    c.lg.gain.cancelScheduledValues(t);
+    c.lg.gain.setValueAtTime(0, t);
+    try { c.o.stop(t + 0.08); c.lfo.stop(t + 0.08); } catch (_) { /* ya parado */ }
+  }
   function creakSet(level) {
     const ctx = Sound.get();
-    if (!ctx || level <= 0) {
-      if (creak) { creak.g.gain.setTargetAtTime(0, (ctx || Sound.ctx).currentTime, 0.03); }
-      return;
-    }
+    if (!ctx || level <= 0) { creakStop(); return; }
     if (!creak) {
       const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
-      const lfo = ctx.createOscillator(), lg = ctx.createGain();
+      const lfo = ctx.createOscillator(), lg = ctx.createGain(), out = ctx.createGain();
       o.type = "sawtooth"; f.type = "bandpass"; f.Q.value = 6;
-      lfo.frequency.value = 9; lg.gain.value = 0;
-      lfo.connect(lg).connect(g.gain);
-      g.gain.value = 0;
-      o.connect(f).connect(g).connect(ctx.destination);
+      // el temblor modula una ganancia intermedia, nunca por encima de cero
+      g.gain.value = 0; lg.gain.value = 0; out.gain.value = 0.5;
+      lfo.frequency.value = 9;
+      lfo.connect(lg).connect(out.gain);
+      o.connect(f).connect(g).connect(out).connect(ctx.destination);
       o.start(); lfo.start();
-      creak = { o, f, g, lfo, lg };
+      creak = { ctx, o, f, g, lfo, lg, out };
     }
     const t = ctx.currentTime;
     creak.o.frequency.setTargetAtTime(55 + level * 140, t, 0.05);
     creak.f.frequency.setTargetAtTime(300 + level * 1500, t, 0.05);
-    creak.g.gain.setTargetAtTime(0.012 + level * 0.035, t, 0.05);
+    creak.g.gain.setTargetAtTime(0.02 + level * 0.06, t, 0.05);
     creak.lfo.frequency.setTargetAtTime(6 + level * 20, t, 0.05);
-    creak.lg.gain.setTargetAtTime(0.01 + level * 0.02, t, 0.05);
+    creak.lg.gain.setTargetAtTime(0.25 + level * 0.25, t, 0.05);
   }
 
   const sndBtn = $("#snd");
@@ -556,14 +565,12 @@
     const statusEl = $("#pullStatus"), lamp = $("#lamp");
 
     const SMAX = 10;            // 900 % de elongación
-    const P_GRIP = 0.06, P_PAUSE = 0.7, P_BREAK = 0.8;
     let rigW = 0, rigH = 0, fs = 100, W = 0, cw = 90, ch = 150;
     let widths = [], centers = [];
     let s = 1, sTarget = 1, sv = 0, cam = 1;
     let broken = false, gripped = false, stamped = false;
     let flyers = null, breakAt = 0;
     let lastStatus = "";
-    let running = false;
 
     const measure = () => {
       rigW = rig.clientWidth; rigH = rig.clientHeight;
@@ -666,6 +673,7 @@
       lcdBox.classList.remove("glitch");
       lamp.classList.remove("on");
       breakAt = performance.now();
+      const id = runId;
       // las mordazas salen volando
       const half = (W / 2) * s, pad = fs * 0.12;
       const xr = half + pad;
@@ -685,12 +693,14 @@
       lcdF.textContent = "ERR"; lcdE.textContent = "ERR"; lcdR.textContent = "—";
       status("Ensayo finalizado. Se rompió la máquina.");
       setTimeout(() => {
+        if (id !== runId) return;
         pull.classList.add("stamped");
         stamped = true;
         thud(true);
         burst(innerWidth / 2, r.top + r.height * 0.42, { n: 18, kinds: ["crumb", "crumb", "bolt", "plus"] });
       }, 1100);
       setTimeout(() => {
+        if (id !== runId) return;
         clampL.style.visibility = clampR.style.visibility = "hidden";
         flyers = [];
         status("Daños: una máquina. Muestra: intacta, un poco agrandada.");
@@ -698,32 +708,40 @@
       }, 3200);
     };
 
-    const stepPull = () => {
-      const rect = pull.getBoundingClientRect();
-      const total = pull.offsetHeight - window.innerHeight;
-      const p = clamp(-rect.top / total, 0, 1);
-      let stress = 0;
+    // ---- el ensayo ahora lo dispara un botón y corre solo, con su timing ----
+    const goBtn = $("#pullGo"), goTxt = $("#pullGoTxt");
+    const T_GRIP = 600, T_STRETCH = 6800, T_PAUSE = 8400; // ms; después, se rompe
+    let state = "idle";   // idle | running | broken
+    let t0 = 0, runId = 0, animating = false, settleUntil = 0, pullVisible = false;
 
-      if (!broken) {
-        if (p < P_GRIP) {
+    const setBtn = (txt, disabled) => {
+      goTxt.innerHTML = txt;
+      goBtn.disabled = disabled;
+      goBtn.classList.toggle("busy", disabled);
+    };
+
+    const idleState = () => {
+      status("Muestra sujeta. Falta que aprietes el botón rojo.");
+      lcdF.textContent = "0 N"; lcdE.textContent = "0 %"; lcdR.textContent = "30 %";
+    };
+
+    const stepPull = (now) => {
+      let stress = 0;
+      if (state === "running") {
+        const el = now - t0;
+        if (el < T_GRIP) {
           sTarget = 1;
-          if (gripped) { gripped = false; }
           status("Sujetando muestra.");
-          lcdF.textContent = "0 N"; lcdE.textContent = "0 %"; lcdR.textContent = "30 %";
-          pull.classList.remove("paused", "doubt");
-          creakSet(0);
-        } else if (p < P_PAUSE) {
+        } else if (el < T_STRETCH) {
           if (!gripped) { gripped = true; clack(); }
-          const t = (p - P_GRIP) / (P_PAUSE - P_GRIP);
-          sTarget = 1 + Math.pow(t, 1.5) * (SMAX - 1);
+          const t = (el - T_GRIP) / (T_STRETCH - T_GRIP);
+          sTarget = 1 + Math.pow(t, 1.6) * (SMAX - 1);
           stress = clamp(t * 1.1, 0, 1);
-          pull.classList.remove("paused");
           pull.classList.toggle("doubt", s > 4.5);
           rig.classList.toggle("hot", s > 6.5);
           lcdBox.classList.toggle("glitch", s > 7.5);
-          lamp.classList.toggle("on", s > 3 && Math.floor(performance.now() / (s > 6 ? 90 : 220)) % 2 === 0);
-          const el = (s - 1) * 100;
-          lcdE.textContent = `${Math.round(el)} %`;
+          lamp.classList.toggle("on", s > 3 && Math.floor(now / (s > 6 ? 90 : 220)) % 2 === 0);
+          lcdE.textContent = `${Math.round((s - 1) * 100)} %`;
           lcdF.textContent = fmtN(9.81 * Math.pow(s - 1, 2.6) * 60);
           lcdR.textContent = s < 1.35 ? "30 %" : s < 2.2 ? "120 %" : s < 3.5 ? "250 %" : s < 5 ? "¿500 %?" : s < 7 ? "consultar" : "—";
           status(
@@ -734,10 +752,9 @@
             s < 7 ? "Llamando al técnico." :
                     "El técnico tampoco sabe."
           );
-          creakSet(stress);
-        } else if (p < P_BREAK) {
+          creakSet(pullVisible ? stress : 0);
+        } else if (el < T_PAUSE) {
           // la pausa antes del remate
-          if (!gripped) { gripped = true; }
           sTarget = SMAX;
           pull.classList.add("paused");
           pull.classList.remove("doubt");
@@ -748,46 +765,73 @@
           creakSet(0);
         } else {
           s = Math.max(s, sTarget);
+          state = "broken";
+          settleUntil = now + 4200;
           doBreak();
         }
         s += (sTarget - s) * 0.2;
-      } else {
+      } else if (state === "broken") {
         // resorte: vuelve, se pasa, rebota
         sv += -(s - 1) * 0.085;
         sv *= 0.86;
         s += sv;
         if (s < 0.62) { s = 0.62; sv = Math.abs(sv) * 0.45; }
-        if (flyers && flyers.length && performance.now() - breakAt > 3000) flyers = [];
       }
       render(stress);
     };
 
-    const frame = () => {
-      if (!running) return;
-      stepPull();
-      requestAnimationFrame(frame);
+    const frame = (now) => {
+      stepPull(now);
+      if (state === "running" || (state === "broken" && now < settleUntil)) requestAnimationFrame(frame);
+      else { animating = false; sv = 0; s = state === "broken" ? 1 : s; render(0); }
+    };
+    const animate = () => { if (!animating) { animating = true; requestAnimationFrame(frame); } };
+
+    const reset = () => {
+      runId++;
+      state = "idle";
+      broken = false; gripped = false; stamped = false;
+      flyers = null; s = 1; sv = 0; sTarget = 1; cam = 1;
+      pull.classList.remove("broken", "stamped", "paused", "doubt");
+      rig.classList.remove("hot"); lcdBox.classList.remove("glitch"); lamp.classList.remove("on");
+      clampL.style.visibility = clampR.style.visibility = "";
+      creakSet(0);
+      idleState();
     };
 
-    if (reduceMotion) {
-      // sin animación: se muestra el resultado
-      measure();
-      broken = true; gripped = true; s = 1;
+    const finalState = () => {
+      broken = true; gripped = true; s = 1; state = "broken";
       pull.classList.add("broken", "stamped");
       clampL.style.visibility = clampR.style.visibility = "hidden";
       flyers = [];
       status("Ensayo finalizado: 900 % de elongación. Se rompió la máquina. Muestra intacta.");
       lcdF.textContent = "—"; lcdE.textContent = "900 %"; lcdR.textContent = "nunca";
       render(0);
-    } else {
-      const start = () => { measure(); render(0); };
-      (document.fonts ? document.fonts.ready : Promise.resolve()).then(start);
-      start();
-      new IntersectionObserver(([e]) => {
-        if (e.isIntersecting && !running) { running = true; requestAnimationFrame(frame); }
-        else if (!e.isIntersecting) { running = false; creakSet(0); }
-      }, { rootMargin: "100px 0px" }).observe(pull);
-      let rT; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(() => { measure(); render(0); }, 150); });
-    }
+    };
+
+    // tocar la máquina o el nombre también arranca el ensayo
+    rig.addEventListener("click", () => { if (state === "idle") goBtn.click(); });
+    goBtn.addEventListener("click", () => {
+      if (state === "running") return;
+      if (state === "broken") reset();
+      pull.classList.add("started");
+      if (reduceMotion) { finalState(); setBtn("Ensayo<br />terminado", false); return; }
+      state = "running";
+      t0 = performance.now();
+      const id = runId;
+      setBtn("Ensa&shy;yando…", true);
+      // cuando termina todo, el botón ofrece repetir
+      setTimeout(() => { if (id === runId) setBtn("Reparar y<br />repetir", false); }, T_PAUSE + 3600);
+      animate();
+    });
+
+    const start = () => { measure(); render(0); };
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(start);
+    start();
+    idleState();
+    // si se va de la sección a mitad del ensayo, el crujido se calla
+    new IntersectionObserver(([e]) => { pullVisible = e.isIntersecting; if (!pullVisible) creakSet(0); }).observe(pull);
+    let rT; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(() => { measure(); render(0); }, 150); });
   }
 
   /* ---------------------------------------------------------
