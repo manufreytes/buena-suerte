@@ -1013,12 +1013,12 @@ main > section.news { width: min(1140px, 94vw); }
 .sh-end { grid-column: 1; margin-bottom: 0; }
 .end-title {
   font-family: var(--f-display);
-  font-size: clamp(3.4rem, 1rem + 7.4vw, 8.6rem);
+  font-size: clamp(3.2rem, .8rem + 6.2vw, 7.6rem);
   line-height: .84;
   letter-spacing: -.035em;
   color: var(--campo);
 }
-.end-title span { color: var(--goma); display: inline-block; margin-left: .35em; rotate: -2deg; }
+.end-title span { color: var(--goma); display: inline-block; margin-left: .25em; rotate: -2deg; }
 .end-sub { margin-top: 1.4rem; max-width: 32ch; font-size: clamp(1.15rem, 1rem + .5vw, 1.45rem); font-weight: 600; line-height: 1.3; }
 
 .stampzone { position: relative; padding-top: 4rem; margin-right: 2.5rem; }
@@ -1209,7 +1209,7 @@ main > section.news { width: min(1140px, 94vw); }
 @media (max-width: 640px) {
   :root { --gutter: 1.1rem; }
   .hero-bar { font-size: .98rem; padding-block: .8rem .6rem; }
-  .hero-bar > span:first-child { max-width: 15ch; line-height: 1; }
+  .hero-bar > span:first-child { line-height: 1; }
   .hero-main { padding-top: 1.4rem; align-content: center; }
   .rubber { font-size: 20.6vw; }
   .hero-foot { grid-template-columns: 1fr; gap: 1.6rem; }
@@ -1223,7 +1223,7 @@ main > section.news { width: min(1140px, 94vw); }
   .spec::after { display: none; }
   .spec dl div { grid-template-columns: 1fr; gap: .25rem; }
   .yp-shout { left: -.6em; font-size: 3.4rem; }
-  .yp-note { right: -.4rem; bottom: 3.2rem; font-size: 1.7rem; }
+  .yp-note { position: static; margin-top: .8rem; text-align: left; rotate: -3deg; font-size: 1.8rem; }
   main > section.pull { height: 420vh; }
   .pull-sticky { padding-bottom: 4.4rem; }
   .pull-nope { left: 8.5rem; }
@@ -1241,7 +1241,11 @@ main > section.news { width: min(1140px, 94vw); }
   .tape-bit { width: 90px; height: 28px; }
   .tape-bit.t1 { left: -18px; }
   .tape-bit.t2 { right: -16px; }
-  .end-title span { margin-left: .2em; }
+  .end-title span { margin-left: .15em; }
+  .sign { justify-self: stretch; padding-right: .4rem; }
+  .sign-txt { font-size: 2rem; }
+  .stampzone { margin-right: 3rem; }
+  .stamper { right: -2.6rem; }
   .foot { grid-template-columns: 1fr; }
   .again { justify-self: start; }
   .fine { flex-direction: column; font-size: 1.05rem; }

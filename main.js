@@ -638,6 +638,7 @@
       const h0 = fs * 0.34;
       const hm = h0 / Math.pow(Math.max(s, 0.6), 0.75);
       const cy = -hm + h0 / 2;
+      bandPath.parentNode.style.opacity = clamp((s - 1.04) / 0.45, 0, 1).toFixed(3);
       bandPath.setAttribute("d",
         `M${-L},${-h0 / 2} Q0,${cy} ${L},${-h0 / 2} L${L},${h0 / 2} Q0,${-cy} ${-L},${h0 / 2} Z`);
 
@@ -950,7 +951,7 @@
       busy = true;
       const rr = report.getBoundingClientRect(), sr = stamper.getBoundingClientRect();
       // destino al azar dentro del informe (zona libre de abajo, o encima de todo a medida que se llena)
-      const tx = rand(rr.width * 0.1, rr.width * 0.62);
+      const tx = rand(rr.width * 0.08, rr.width * 0.68);
       const ty = n < 3 ? rand(rr.height * 0.66, rr.height * 0.8) : rand(rr.height * 0.12, rr.height * 0.8);
       const dx = rr.left + tx - (sr.left + sr.width / 2) + 40;
       const dy = rr.top + ty - sr.bottom + 10;

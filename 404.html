@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 · Muestra no encontrada</title>
+  <meta name="theme-color" content="#170A33" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=VT323&family=Nanum+Pen+Script&display=swap" rel="stylesheet" />
+  <style>
+    :root { --ink:#170A33; --goma:#FF6FA3; --sh:#9E2459; --campo:#3DF5FF; --alerta:#FFE14D; --papel:#FFF6EC; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; overflow-x: clip; }
+    body {
+      min-height: 100svh; background: var(--ink); color: var(--papel);
+      font-family: "Bricolage Grotesque", system-ui, sans-serif;
+      display: grid; grid-template-rows: auto 1fr auto;
+      background-image:
+        linear-gradient(rgba(61,245,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(61,245,255,.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .bar { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem max(4vw, 1.1rem); font: 1.2rem "VT323", monospace; text-transform: uppercase; letter-spacing: .05em; color: var(--campo); border-bottom: 1px solid rgba(61,245,255,.22); }
+    .bar b { font-weight: 400; color: var(--goma); }
+    main { padding: 2rem max(4vw, 1.1rem); align-self: center; }
+    .k { font: 1.4rem "VT323", monospace; color: var(--alerta); text-transform: uppercase; letter-spacing: .06em; margin: 0; }
+    h1 { margin: 0 0 .22em; font: 400 clamp(9rem, 38vw, 26rem)/.82 "Bagel Fat One", system-ui; letter-spacing: -.04em; display: flex; user-select: none; touch-action: none; }
+    h1 span { display: inline-block; cursor: grab; color: var(--goma); text-shadow: 0 .05em 0 var(--sh), 0 .1em 0 var(--sh), 0 .16em .14em rgba(0,0,0,.45); will-change: transform; transform-origin: 50% 85%; }
+    p.t { font-weight: 800; font-size: clamp(1.6rem, 1rem + 3vw, 3.2rem); line-height: 1.05; letter-spacing: -.03em; margin: 1.4rem 0 0; max-width: 20ch; }
+    p.t em { font-style: normal; color: var(--campo); }
+    .hand { font-family: "Nanum Pen Script", cursive; color: var(--alerta); font-size: clamp(1.8rem, 1.3rem + 1.2vw, 2.6rem); line-height: .95; rotate: -4deg; margin: 1.4rem 0 .6rem; }
+    a.back { display: inline-block; margin-top: 2rem; font: 1.5rem "VT323", monospace; text-transform: uppercase; letter-spacing: .05em; color: var(--ink); background: var(--alerta); border: 3px solid var(--ink); box-shadow: 5px 5px 0 var(--goma); padding: .3rem 1rem; text-decoration: none; transition: transform .15s cubic-bezier(.3,1.6,.5,1); }
+    a.back:hover { transform: translate(-2px,-3px) rotate(-2deg); }
+    a.back:focus-visible { outline: 3px dashed var(--alerta); outline-offset: 5px; }
+    footer { padding: 1rem max(4vw, 1.1rem) 1.4rem; font: 1.1rem "VT323", monospace; opacity: .6; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="bar"><span>Comité de Cargas Positivas</span><span><b>●</b> error de laboratorio</span></div>
+  <main>
+    <p class="k">Muestra no encontrada</p>
+    <h1 id="r" aria-label="404"><span aria-hidden="true">4</span><span aria-hidden="true">0</span><span aria-hidden="true">4</span></h1>
+    <p class="t">Esta página no existe. <em>Como los nervios de Victorio.</em></p>
+    <p class="hand">(los números sí se estiran. probá.)</p>
+    <a class="back" href="./">Volver al laboratorio ↩</a>
+  </main>
+  <footer>Informe N.º 404 · nada que ver acá · literalmente</footer>
+  <script>
+    (() => {
+      const rm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const L = [...document.querySelectorAll("#r span")].map((el, i) => ({ el, i, x: 0, y: rm ? 0 : -innerHeight - i * 80, vx: 0, vy: 0, drag: false, sx: 0, sy: 0 }));
+      let act = null;
+      L.forEach((l) => {
+        l.el.addEventListener("pointerdown", (e) => { e.preventDefault(); l.el.setPointerCapture(e.pointerId); l.drag = true; l.sx = e.clientX - l.x; l.sy = e.clientY - l.y; act = l; });
+        l.el.addEventListener("pointermove", (e) => {
+          if (!l.drag) return;
+          const dx = e.clientX - l.sx, dy = e.clientY - l.sy, d = Math.hypot(dx, dy) || 1, m = Math.min(innerWidth, 900) * .45, f = m * Math.tanh(d / m) / d;
+          l.vx = dx * f - l.x; l.vy = dy * f - l.y; l.x = dx * f; l.y = dy * f;
+        });
+        const up = () => { l.drag = false; act = null; };
+        l.el.addEventListener("pointerup", up); l.el.addEventListener("pointercancel", up);
+      });
+      const C = [1, .4, .15];
+      (function loop() {
+        for (const l of L) {
+          if (l.drag) continue;
+          const c = act ? C[Math.abs(act.i - l.i)] || 0 : 0;
+          l.vx = (l.vx + ((act ? act.x * c : 0) - l.x) * .075) * .86;
+          l.vy = (l.vy + ((act ? act.y * c : 0) - l.y) * .075) * .86;
+          l.x += l.vx; l.y += l.vy;
+        }
+        for (const l of L) {
+          const d = Math.hypot(l.x, l.y), v = Math.hypot(l.vx, l.vy);
+          const a = l.drag ? Math.atan2(l.y, l.x) : Math.atan2(l.vy, l.vx);
+          const s = l.drag ? 1 + Math.min(d / 180, 1.1) : 1 + Math.min(v / 40, .5);
+          l.el.style.transform = `translate(${l.x}px,${l.y}px) rotate(${a}rad) scale(${s},${1 / Math.sqrt(s)}) rotate(${-a}rad)`;
+        }
+        requestAnimationFrame(loop);
+      })();
+    })();
+  </script>
+</body>
+</html>
