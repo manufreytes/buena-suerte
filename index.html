@@ -2,133 +2,194 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Victorio va a hacer Física 2 de goma ⚡</title>
-  <meta name="description" content="Comunicado urgente: Victorio rinde Física 2 y la va a hacer de goma." />
-  <meta property="og:title" content="Victorio va a hacer Física 2 de goma ⚡" />
-  <meta property="og:description" content="Resistividad a los nervios: 10¹³ Ω·m. Igual que la goma." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Victorio va a hacer Física 2 de goma</title>
+  <meta name="description" content="Informe N.º 10 del Comité de Cargas Positivas: intentamos romper a Victorio antes de Física 2. No se pudo." />
+  <meta name="theme-color" content="#170A33" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Informe N.º 10: intentamos romper a Victorio" />
+  <meta property="og:description" content="Ensayo de materiales previo a Física 2. Resultado: se rompió la máquina." />
+  <meta property="og:image" content="og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=VT323&family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Libre+Caslon+Text:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=VT323&family=Nanum+Pen+Script&family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Libre+Caslon+Text:ital@0;1&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
 
-  <!-- ============ HERO ============ -->
+  <a class="skip" href="#s1">Saltar al informe</a>
+
+  <!-- ============ CARGA ============ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <p class="loader-line">Preparando muestra <b>MAT-VIC-001</b></p>
+    <div class="loader-band"><i></i></div>
+    <p class="loader-line loader-pct"><span id="loaderPct">0</span>% de elongación · no se rompe</p>
+  </div>
+
+  <!-- ============ SONIDO (arranca apagado) ============ -->
+  <button class="snd" id="snd" type="button" aria-pressed="false" aria-label="Activar sonido">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path class="snd-body" d="M3 9h4l5-4v14l-5-4H3z"/><path class="snd-on" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/><path class="snd-off" d="M16 9l5 6M21 9l-5 6"/></svg>
+    <span>sonido <b id="sndState">off</b></span>
+  </button>
+
+  <!-- ============ CARÁTULA ============ -->
   <header class="hero" id="top">
     <canvas id="field" aria-hidden="true"></canvas>
     <div class="charge-tag" id="chargeTag" aria-hidden="true">+q</div>
 
-    <div class="hero-inner">
-      <p class="eyebrow">
-        <span class="blink">●</span> Transmisión urgente del Comité de Cargas Positivas
-      </p>
+    <div class="hero-bar">
+      <span>Comité de Cargas Positivas<span class="hide-m"> · Laboratorio de Ensayos</span></span>
+      <span class="hb-mid">Informe N.º 10</span>
+      <span class="hb-state"><i class="dot"></i> muestra en ensayo</span>
+    </div>
+
+    <div class="hero-main">
+      <p class="hero-kicker">Muestra MAT-VIC-001 <span>/</span> Física&nbsp;II</p>
 
       <h1 class="rubber" id="rubber" aria-label="Victorio">
         <span aria-hidden="true">V</span><span aria-hidden="true">I</span><span aria-hidden="true">C</span><span aria-hidden="true">T</span><span aria-hidden="true">O</span><span aria-hidden="true">R</span><span aria-hidden="true">I</span><span aria-hidden="true">O</span>
       </h1>
 
-      <p class="lede">
-        va a rendir <strong>Física&nbsp;2</strong><br />
-        y la va a hacer <span class="goma">de&nbsp;goma</span>
-      </p>
-
-      <p class="hint">↑ estirá las letras. son de goma. como el examen.</p>
+      <div class="hero-foot">
+        <p class="lede">rinde <strong>Física&nbsp;2</strong><br />y la va a hacer <button class="goma" id="goma" type="button">de&nbsp;goma</button></p>
+        <p class="hand hero-note" id="heroNote">
+          <span id="heroNoteTxt">estirá las letras.<br />no se rompen. (probamos)</span>
+          <svg class="hero-arrow" viewBox="0 0 120 90" aria-hidden="true"><path d="M8 80 C 30 70, 60 60, 78 30 S 96 8, 104 6 M92 4 L106 5 L100 18"/></svg>
+        </p>
+      </div>
     </div>
 
-    <div class="sticker s1" aria-hidden="true">100% aislante<br />a los nervios</div>
-    <div class="sticker s2" aria-hidden="true">aprobado™<br /><small>certificado por Gauss</small></div>
-    <div class="sticker s3" aria-hidden="true">🦆</div>
+    <div class="tag" aria-hidden="true">
+      <i class="tag-hole"></i>
+      <p class="tag-k">Muestra N.º</p>
+      <p class="tag-n">001</p>
+      <p class="tag-row"><span>Material</span><b>Victorio</b></p>
+      <p class="tag-row"><span>Frágil</span><b>no</b></p>
+      <p class="tag-row"><span>Estado</span><b>elástico</b></p>
+    </div>
+
+    <div class="seal" aria-hidden="true">
+      <svg viewBox="0 0 200 200"><defs><path id="sealPath" d="M100 100 m-74 0 a74 74 0 1 1 148 0 a74 74 0 1 1 -148 0"/></defs><text><textPath href="#sealPath">100% aislante a los nervios · 100% aislante a los nervios · </textPath></text></svg>
+      <b>+q</b>
+    </div>
+
+    <a class="hero-down" href="#s1">ver informe completo <span aria-hidden="true">↓</span></a>
   </header>
 
-  <!-- ============ TAPE ============ -->
+  <!-- ============ CINTA ============ -->
   <div class="tape" aria-hidden="true">
     <div class="tape-track">
-      <span>MUCHA SUERTE VICTORIO</span><b>⚡</b>
-      <span>LEY DE GAUSS: SUPERADA</span><b>🧲</b>
-      <span>FARADAY: TEMBLANDO</span><b>⚡</b>
-      <span>OHM: SIN RESISTENCIA</span><b>🍀</b>
-      <span>KIRCHHOFF: EN SHOCK</span><b>⚡</b>
-      <span>MUCHA SUERTE VICTORIO</span><b>⚡</b>
-      <span>LEY DE GAUSS: SUPERADA</span><b>🧲</b>
-      <span>FARADAY: TEMBLANDO</span><b>⚡</b>
-      <span>OHM: SIN RESISTENCIA</span><b>🍀</b>
-      <span>KIRCHHOFF: EN SHOCK</span><b>⚡</b>
+      <span>Hipótesis: la hace de goma</span><i class="tb"></i>
+      <span>Gauss: superado</span><i class="tb"></i>
+      <span>Faraday: temblando</span><i class="tb"></i>
+      <span>Ohm: sin resistencia</span><i class="tb"></i>
+      <span>Kirchhoff: en shock</span><i class="tb"></i>
+      <span>Coulomb: pide distancia</span><i class="tb"></i>
+      <span>Hipótesis: la hace de goma</span><i class="tb"></i>
+      <span>Gauss: superado</span><i class="tb"></i>
+      <span>Faraday: temblando</span><i class="tb"></i>
+      <span>Ohm: sin resistencia</span><i class="tb"></i>
+      <span>Kirchhoff: en shock</span><i class="tb"></i>
+      <span>Coulomb: pide distancia</span><i class="tb"></i>
     </div>
   </div>
 
   <main>
 
-    <!-- ============ FICHA TÉCNICA ============ -->
-    <section class="spec reveal" aria-labelledby="spec-title">
-      <div class="spec-card">
-        <div class="spec-head">
-          <h2 id="spec-title">Ficha técnica del material</h2>
-          <span class="spec-code">MAT-VIC-001</span>
+    <!-- ============ 1 · CARACTERIZACIÓN ============ -->
+    <section class="s1" id="s1" aria-labelledby="s1-title">
+      <header class="sh">
+        <p class="sh-label"><span class="sh-n">1</span> Caracterización de la muestra</p>
+        <h2 class="sh-title" id="s1-title">Primero, conozcan al material.</h2>
+      </header>
+
+      <div class="s1-grid">
+        <article class="spec" data-reveal="drop">
+          <div class="spec-head">
+            <h3>Ficha técnica</h3>
+            <button class="spec-code" id="specCode" type="button" aria-label="Código de muestra MAT-VIC-001">MAT-VIC-001</button>
+          </div>
+          <dl>
+            <div><dt>Material</dt><dd>Victorio</dd></div>
+            <div><dt>Resistividad a los nervios</dt><dd>10<sup>13</sup>&nbsp;Ω·m <em>igual que la goma. en serio, buscalo.</em></dd></div>
+            <div><dt>Conductividad de preguntas difíciles</dt><dd>Nula. Rebotan.</dd></div>
+            <div><dt>Elasticidad</dt><dd>Ver ensayo&nbsp;2. <em>spoiler: mucha.</em></dd></div>
+            <div><dt>Efectos de la exposición prolongada</dt><dd>Interferencia. <em>aumento de temperatura local (no comprobado, no preguntar).</em></dd></div>
+            <div class="spec-res"><dt>Resultado esperado</dt><dd>De goma.</dd></div>
+            <div class="classified" id="classified" hidden>
+              <dt>Anexo confidencial</dt>
+              <dd><span class="redact">La camisa a cuadros sumó puntos en la evaluación.</span> <em>no se informa cuántos.</em></dd>
+            </div>
+          </dl>
+          <p class="spec-foot">La goma no conduce la corriente. Victorio no conduce el estrés. Es ciencia.</p>
+        </article>
+
+        <figure class="yp" id="yopuedo" data-reveal="pop">
+          <p class="yp-shout" aria-hidden="true"><span>¡Yo</span><span>puedo!</span></p>
+          <div class="yp-frame">
+            <span class="yp-live" aria-hidden="true"><i class="dot"></i> REC</span>
+            <video id="ypVideo" src="video/yo-puedo.mp4" poster="video/yo-puedo-poster.jpg"
+                   muted loop playsinline preload="metadata"
+                   aria-label="Victorio diciendo: yo puedo"></video>
+            <p class="yp-sub" aria-hidden="true">—¡Yo puedo!</p>
+            <button class="yp-sound" id="ypSound" type="button" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path class="snd-body" d="M3 9h4l5-4v14l-5-4H3z"/><path class="snd-on" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/><path class="snd-off" d="M16 9l5 6M21 9l-5 6"/></svg>
+              <span class="yp-sound-txt">escuchar la declaración</span>
+            </button>
+          </div>
+          <figcaption>Registro audiovisual. Declaración espontánea de la muestra.</figcaption>
+          <p class="hand yp-note">se presentó sola.<br />nadie le preguntó.</p>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ 2 · ENSAYO DE TRACCIÓN ============ -->
+    <section class="pull" id="pull" aria-labelledby="pull-title">
+      <div class="pull-sticky">
+        <header class="sh sh-pull">
+          <p class="sh-label"><span class="sh-n">2</span> Ensayo de tracción</p>
+          <h2 class="sh-title" id="pull-title">Intentamos <span class="strike">romperlo<svg viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true"><path d="M4 26 C 60 14, 120 30, 180 18 S 270 12, 296 20"/></svg></span>.</h2>
+          <p class="hand pull-nope" aria-hidden="true">(no se pudo)</p>
+        </header>
+
+        <p class="sr-only">Una máquina de ensayo estira el nombre Victorio a medida que scrolleás. El nombre se estira hasta novecientos por ciento sin romperse; lo que se rompe es la máquina.</p>
+
+        <div class="rig" id="rig" aria-hidden="true">
+          <canvas class="ruler" id="ruler"></canvas>
+          <div class="world" id="world">
+            <svg class="band" width="1" height="1"><path id="bandPath" d="" /></svg>
+            <div class="pull-word" id="pullWord"><span>V</span><span>I</span><span>C</span><span>T</span><span>O</span><span>R</span><span>I</span><span>O</span></div>
+            <div class="clamp" id="clampL"><i class="jaw"></i><i class="bolt b1"></i><i class="bolt b2"></i><i class="screw"></i></div>
+            <div class="clamp clamp-r" id="clampR"><i class="jaw"></i><i class="bolt b1"></i><i class="bolt b2"></i><i class="screw"></i></div>
+          </div>
+          <p class="pull-silence hand">(silencio incómodo)</p>
+          <div class="pull-stamp" id="pullStamp"><span>No se rompe</span></div>
         </div>
-        <dl>
-          <div><dt>Material</dt><dd>Victorio</dd></div>
-          <div><dt>Resistividad a los nervios</dt><dd>10<sup>13</sup> Ω·m <em>(igual que la goma, en serio, buscalo)</em></dd></div>
-          <div><dt>Conductividad de preguntas difíciles</dt><dd>Nula. Rebotan.</dd></div>
-          <div><dt>Coeficiente de preparación</dt><dd>Muchísimo</dd></div>
-          <div><dt>Resultado esperado</dt><dd class="hl">De goma</dd></div>
-        </dl>
-        <p class="spec-foot">La goma no conduce la corriente. Victorio no conduce el estrés. Es ciencia.</p>
+
+        <div class="panel" aria-hidden="true">
+          <div class="plate"><b>Tensiómetro<span class="hide-m"> Comité</span> Mod.&nbsp;1</b><span>garantía vencida</span><i class="lamp" id="lamp"></i></div>
+          <div class="lcd2">
+            <p><span>fuerza</span><b id="lcdF">0 N</b></p>
+            <p><span>elongación</span><b id="lcdE">0 %</b></p>
+            <p><span>rotura estimada</span><b id="lcdR">30 %</b></p>
+          </div>
+          <p class="pull-status" id="pullStatus">Sujetando muestra.</p>
+        </div>
+        <p class="hand pull-note" aria-hidden="true">subestimamos<br />a la muestra</p>
       </div>
     </section>
 
-    <!-- ============ VIDEO: YO PUEDO ============ -->
-    <section class="yopuedo reveal" id="yopuedo" aria-labelledby="yp-title">
-      <div class="yp-copy">
-        <p class="yp-eyebrow">Declaración oficial del material</p>
-        <h2 id="yp-title" class="yp-shout" aria-label="¡Yo puedo!">
-          <span class="yp-w">¡YO</span>
-          <span class="yp-w">PUEDO!</span>
-        </h2>
-        <p class="yp-note">Fuente: el propio Victorio. Confirmado por Gauss, Faraday y su mamá.</p>
-      </div>
-
-      <div class="yp-frame">
-        <span class="yp-live" aria-hidden="true"><span class="blink">●</span> REC</span>
-        <video id="ypVideo" src="video/yo-puedo.mp4" poster="video/yo-puedo-poster.jpg"
-               autoplay muted loop playsinline preload="metadata"
-               aria-label="Victorio diciendo: yo puedo"></video>
-        <p class="yp-sub" aria-hidden="true">— ¡Yo puedo!</p>
-        <button class="yp-sound" id="ypSound" type="button" aria-pressed="false">
-          <span class="yp-sound-ico" aria-hidden="true">🔇</span>
-          <span class="yp-sound-txt">Tocá para escucharlo</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- ============ MEME: NO / SÍ ============ -->
-    <section class="meme-nosi reveal" aria-labelledby="nosi-title">
-      <h2 id="nosi-title" class="section-title">Formato clásico, versión <span class="pink">goma</span></h2>
-      <div class="nosi">
-        <div class="nosi-face no" aria-hidden="true">🙅‍♂️</div>
-        <div class="nosi-text no">Estudiar Física 2 a las 4 AM con el mate frío y un ataque de pánico</div>
-        <div class="nosi-face yes" aria-hidden="true">😎👉</div>
-        <div class="nosi-text yes">Ser Victorio y entrar al examen como si fuera el living de su casa</div>
-      </div>
-    </section>
-
-    <!-- ============ MEME: GALAXY BRAIN ============ -->
-    <section class="brain reveal" aria-labelledby="brain-title">
-      <h2 id="brain-title" class="section-title">Evolución del cerebro electromagnético</h2>
-      <ol class="brain-list">
-        <li style="--lvl:0"><span class="b-txt">Saber que las cargas iguales se repelen.</span><span class="b-img" aria-hidden="true">🧠</span></li>
-        <li style="--lvl:1"><span class="b-txt">Calcular un flujo con Gauss sin llorar.</span><span class="b-img" aria-hidden="true">🧠</span></li>
-        <li style="--lvl:2"><span class="b-txt">Soñar con la ley de Faraday y despertarse sabiéndola.</span><span class="b-img" aria-hidden="true">🧠</span></li>
-        <li style="--lvl:3"><span class="b-txt">Ser Victorio: el campo magnético se alinea solo cuando él entra al aula.</span><span class="b-img" aria-hidden="true">🌌</span></li>
-      </ol>
-    </section>
-
-    <!-- ============ VOLTÍMETRO ============ -->
-    <section class="meter reveal" id="meter" aria-labelledby="meter-title">
-      <h2 id="meter-title" class="section-title">Medición en vivo del nivel de preparación</h2>
-      <div class="meter-box">
-        <svg viewBox="0 0 300 180" class="gauge" role="img" aria-label="Voltímetro con la aguja pasada del máximo">
+    <!-- ============ 3 · ENSAYO ELÉCTRICO ============ -->
+    <section class="meter" id="meter" aria-labelledby="meter-title">
+      <header class="sh sh-meter">
+        <p class="sh-label"><span class="sh-n">3</span> Ensayo eléctrico</p>
+        <h2 class="sh-title" id="meter-title">Le medimos la preparación.</h2>
+      </header>
+      <div class="meter-box" data-reveal="power">
+        <svg viewBox="0 0 300 180" class="gauge" role="img" aria-label="Voltímetro: la aguja se pasa del máximo">
           <path d="M30 160 A120 120 0 0 1 270 160" class="g-arc" />
           <path d="M222 74 A120 120 0 0 1 270 160" class="g-red" />
           <g class="g-ticks"></g>
@@ -142,38 +203,76 @@
           <text x="150" y="118" class="g-unit">PREPARACIÓN (V)</text>
         </svg>
         <div class="meter-read">
+          <p class="meter-k">lectura</p>
           <div class="lcd" id="lcd">0.00 V</div>
-          <p class="meter-err" id="meterErr">⚠ ERROR: VALOR FUERA DE ESCALA<br />el instrumento no fue diseñado para tanto Victorio</p>
+          <p class="meter-err" id="meterErr">ERROR · valor fuera de escala<br />el instrumento no fue diseñado para tanto Victorio</p>
+        </div>
+        <p class="hand meter-note">el voltímetro<br />era nuevo</p>
+      </div>
+    </section>
+
+    <!-- ============ 4 · MARCO TEÓRICO ============ -->
+    <section class="theory" id="theory" aria-labelledby="th-title">
+      <header class="sh sh-theory">
+        <p class="sh-label"><span class="sh-n">4</span> Marco teórico</p>
+        <h2 class="sh-title" id="th-title">Maxwell, con correcciones de la cátedra.</h2>
+      </header>
+
+      <div class="sheet" id="sheet">
+        <p class="sheet-head"><span class="hand">Física II — Ecuaciones de Maxwell</span><span class="hand">Alumno: Victorio</span></p>
+        <ol class="eqs">
+          <li style="--i:0">
+            <span class="eq-name">Ley de Gauss</span>
+            <span class="eq-old">∇·<i>E</i> = <i>ρ</i>/<i>ε</i>₀<svg class="x" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M3 24 C 50 12, 90 30, 140 16 S 190 20, 197 14"/></svg></span>
+            <span class="eq-new hand">∇·V = ∞</span>
+            <span class="eq-why hand">le sale conocimiento para todos lados</span>
+          </li>
+          <li style="--i:1">
+            <span class="eq-name">Gauss para el magnetismo</span>
+            <span class="eq-old">∇·<i>B</i> = 0<svg class="x" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M3 20 C 60 30, 110 10, 197 22"/></svg></span>
+            <span class="eq-new hand">dudas = 0</span>
+            <span class="eq-why hand">monopolos: cero. dudas: también.</span>
+          </li>
+          <li style="--i:2">
+            <span class="eq-name">Ley de Faraday</span>
+            <span class="eq-old">∇×<i>E</i> = −∂<i>B</i>/∂<i>t</i><svg class="x" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M3 18 C 40 28, 100 8, 150 24 S 190 16, 197 20"/></svg></span>
+            <span class="eq-new hand">∂pregunta/∂t → respuesta</span>
+            <span class="eq-why hand">si le cambian la pregunta, induce la respuesta</span>
+          </li>
+          <li style="--i:3">
+            <span class="eq-name">Ampère–Maxwell</span>
+            <span class="eq-old">∇×<i>B</i> = <i>μ</i>₀<i>J</i> + <i>μ</i>₀<i>ε</i>₀ ∂<i>E</i>/∂<i>t</i><svg class="x" viewBox="0 0 200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M3 22 C 70 10, 120 32, 197 16"/></svg></span>
+            <span class="eq-new hand">∇×(buena onda) = aprobado</span>
+            <span class="eq-why hand">la corriente de buena onda genera un campo de aprobación</span>
+          </li>
+        </ol>
+        <div class="grade" aria-label="Nota: 10, felicitaciones">
+          <svg viewBox="0 0 160 130" aria-hidden="true"><path d="M86 10 C 30 6, 6 40, 12 74 C 18 110, 70 124, 112 110 C 150 96, 156 50, 132 26 C 116 10, 92 6, 70 12"/></svg>
+          <span class="hand grade-n">10</span>
+          <span class="hand grade-sub">felicitaciones.<br />no se agrande.</span>
         </div>
       </div>
     </section>
 
-    <!-- ============ MAXWELL ============ -->
-    <section class="maxwell reveal" aria-labelledby="mx-title">
-      <h2 id="mx-title" class="section-title">Las ecuaciones de Maxwell, <span class="pink">corregidas</span></h2>
-      <p class="section-sub">Tocá cada tarjeta para ver la versión actualizada.</p>
-      <div class="mx-grid">
-        <button class="mx-card" type="button" aria-label="Ley de Gauss. Tocá para dar vuelta">
-          <span class="mx-face front"><span class="eq">∇·E = ρ/ε₀</span><span class="mx-name">Ley de Gauss</span></span>
-          <span class="mx-face back"><span class="eq">∇·V = ∞</span><span class="mx-name">La divergencia de Victorio es infinita: le sale conocimiento para todos lados.</span></span>
-        </button>
-        <button class="mx-card" type="button" aria-label="Gauss para el magnetismo. Tocá para dar vuelta">
-          <span class="mx-face front"><span class="eq">∇·B = 0</span><span class="mx-name">Gauss magnético</span></span>
-          <span class="mx-face back"><span class="eq">dudas = 0</span><span class="mx-name">Monopolos magnéticos: cero. Dudas de Victorio: también cero.</span></span>
-        </button>
-        <button class="mx-card" type="button" aria-label="Ley de Faraday. Tocá para dar vuelta">
-          <span class="mx-face front"><span class="eq">∇×E = −∂B/∂t</span><span class="mx-name">Ley de Faraday</span></span>
-          <span class="mx-face back"><span class="eq">∂pregunta → respuesta</span><span class="mx-name">Si el profe cambia la pregunta, Victorio induce la respuesta.</span></span>
-        </button>
-        <button class="mx-card" type="button" aria-label="Ley de Ampère-Maxwell. Tocá para dar vuelta">
-          <span class="mx-face front"><span class="eq">∇×B = μ₀J + μ₀ε₀ ∂E/∂t</span><span class="mx-name">Ampère–Maxwell</span></span>
-          <span class="mx-face back"><span class="eq">∇×🍀 = suerte</span><span class="mx-name">La corriente de buena onda genera un campo de aprobación a su alrededor.</span></span>
-        </button>
+    <!-- ============ 5 · OBSERVACIONES ============ -->
+    <section class="obs" id="obs" aria-labelledby="obs-title">
+      <div class="note" data-reveal="tape">
+        <i class="tape-bit t1"></i><i class="tape-bit t2"></i>
+        <i class="mate" aria-hidden="true"></i>
+        <p class="note-label">5 · Observaciones del evaluador</p>
+        <h2 class="hand note-title" id="obs-title">Observaciones <small>(no mostrarle a la muestra)</small></h2>
+        <ol class="note-list">
+          <li>La muestra presenta una seguridad en sí misma <s>insoportable</s> <ins>dentro de los parámetros normales.</ins></li>
+          <li>Durante el ensayo la temperatura del laboratorio subió 2&nbsp;°C. Causa probable: <s>la muestra</s> <ins>el calefactor.</ins></li>
+          <li>Nivel de facha: no se midió. El instrumento <s>se tildó</s> <ins>no corresponde a esta materia.</ins></li>
+          <li>Se recomienda no mostrarle este informe. Ya se la cree bastante.</li>
+        </ol>
       </div>
     </section>
 
-    <!-- ============ EL DIARIO DE LA GOMA ============ -->
+    <!-- ============ 6 · EL DIARIO DE LA GOMA ============ -->
     <section class="news" id="news" aria-labelledby="np-title">
+      <p class="sh-label news-label"><span class="sh-n">6</span> Repercusiones</p>
       <article class="paper" id="paper">
 
         <header class="np-mast">
@@ -189,13 +288,13 @@
         <div class="np-lead story" style="--r:-.6deg">
           <p class="np-kicker">Exclusivo</p>
           <h3 class="np-head-xl">Victorio va a hacer Física&nbsp;2 de goma</h3>
-          <p class="np-deck">Fuentes del campo magnético confirman que está más preparado que nunca. Los profesores, preocupados: «ya no sabemos qué preguntarle».</p>
+          <p class="np-deck">El material soportó un 900&nbsp;% de elongación; la máquina de ensayos, no. Los profesores, preocupados: «ya no sabemos qué preguntarle».</p>
           <figure class="np-photo np-photo-lead">
-            <div class="halftone" aria-hidden="true"><span>🧠</span></div>
-            <figcaption>Imagen ilustrativa del cerebro de Victorio, ayer a la noche.</figcaption>
+            <div class="halftone"><img src="video/yo-puedo-poster.jpg" alt="" loading="lazy" /></div>
+            <figcaption>La muestra, minutos después del ensayo. Se la ve tranquila.</figcaption>
           </figure>
-          <p class="np-body np-dropcap">BUENOS AIRES (Agencia +q). — En una jornada histórica para el electromagnetismo, el alumno confirmó que domina Gauss, Faraday y Ampère «de memoria y de corazón». Consultado por este medio, un capacitor cercano declaró: «Nunca vi a alguien almacenar tanta energía».</p>
-          <div class="np-stamp" aria-hidden="true">URGENTE</div>
+          <p class="np-body np-dropcap">BUENOS AIRES (Agencia +q). — En una jornada histórica para el electromagnetismo, el alumno confirmó que domina Gauss, Faraday y Ampère «de memoria y de corazón». Consultado por este medio, un capacitor cercano declaró: «Nunca vi a alguien almacenar tanta energía». La máquina de ensayos no quiso hacer declaraciones.</p>
+          <div class="np-stamp" aria-hidden="true">Urgente</div>
         </div>
 
         <div class="np-grid">
@@ -203,8 +302,8 @@
             <p class="np-kicker">Ciencia</p>
             <h3 class="np-head">Faraday se levanta un ratito para pedirle una foto</h3>
             <figure class="np-photo">
-              <div class="halftone sm" aria-hidden="true"><span>👻</span></div>
-              <figcaption>Faraday, emocionado.</figcaption>
+              <div class="halftone sm"><img src="img/faraday.jpg" alt="Retrato de Michael Faraday" loading="lazy" /></div>
+              <figcaption>Faraday, emocionado (archivo).</figcaption>
             </figure>
             <p class="np-body">«Este pibe sabe más de inducción que yo», declaró desde el más allá.</p>
           </div>
@@ -213,19 +312,24 @@
             <p class="np-kicker">Economía</p>
             <h3 class="np-head">Se desploma la resistencia: 0&nbsp;Ω</h3>
             <p class="np-body">Ohm confirmó que frente a Victorio la resistencia cae a cero. El mercado de los nervios, en mínimos históricos.</p>
+            <p class="np-ticker"><span>NERVIOS</span> <b>▼ 99,9 %</b><br /><span>CONFIANZA</span> <b>▲ ∞</b></p>
           </div>
 
           <div class="story" style="--r:.8deg">
             <p class="np-kicker">Política</p>
             <h3 class="np-head">Kirchhoff, en shock</h3>
-            <p class="np-body">Confirmó que en el nodo Victorio toda la corriente que entra sale convertida en un 10. «Las leyes son las leyes», dijo, todavía pálido.</p>
+            <figure class="np-photo">
+              <div class="halftone sm"><img src="img/kirchhoff.jpg" alt="Retrato de Gustav Kirchhoff" loading="lazy" /></div>
+              <figcaption>Kirchhoff, todavía pálido.</figcaption>
+            </figure>
+            <p class="np-body">Confirmó que en el nodo Victorio toda la corriente que entra sale convertida en un 10. «Las leyes son las leyes», dijo.</p>
           </div>
 
           <div class="story np-weather" style="--r:-.9deg">
             <p class="np-kicker">Clima</p>
-            <h3 class="np-head">100% de probabilidad de aprobar</h3>
-            <p class="np-body">Se esperan preguntas difíciles, pero rebotan. Campos magnéticos alineados en todo el país.</p>
-            <p class="np-temp" aria-hidden="true">☀️ <b>10°</b></p>
+            <h3 class="np-head">100&nbsp;% de probabilidad de aprobar</h3>
+            <p class="np-temp" aria-hidden="true"><b>10</b>°</p>
+            <p class="np-body">Despejado. Preguntas difíciles aisladas, rebotan antes de tocar el suelo. Campos magnéticos alineados en todo el país.</p>
           </div>
 
           <div class="story" style="--r:1.6deg">
@@ -237,54 +341,94 @@
           <div class="story" style="--r:-1.1deg">
             <p class="np-kicker">Deportes</p>
             <h3 class="np-head">Coulomb pide distancia</h3>
+            <figure class="np-photo">
+              <div class="halftone sm"><img src="img/coulomb.jpg" alt="Retrato de Charles-Augustin de Coulomb" loading="lazy" /></div>
+              <figcaption>Coulomb, a una distancia prudente.</figcaption>
+            </figure>
             <p class="np-body">«La fuerza de este chico es demasiada». Según la ley, baja con 1/r². Con Victorio no baja nada.</p>
           </div>
         </div>
 
-        <div class="np-classified story" style="--r:.5deg">
-          <p class="np-kicker">Clasificados</p>
-          <p class="np-ad"><b>VENDO</b> apuntes de Física 2, usados una sola vez. Ya no los necesito. Tratar con V.</p>
-          <p class="np-ad"><b>BUSCO</b> examen que esté a su altura. Abstenerse parciales fáciles.</p>
+        <div class="np-bottom">
+          <div class="np-classified story" style="--r:.5deg">
+            <p class="np-kicker">Clasificados</p>
+            <p class="np-ad"><b>VENDO</b> apuntes de Física 2, usados una sola vez. Ya no los necesito. Tratar con V.</p>
+            <p class="np-ad"><b>BUSCO</b> examen que esté a su altura. Abstenerse parciales fáciles.</p>
+            <p class="np-ad"><b>SE OFRECE</b> máquina de ensayos, poco uso, un solo golpe. Escucho ofertas.</p>
+          </div>
+          <div class="np-errata story" style="--r:-.4deg">
+            <p class="np-kicker">Fe de erratas</p>
+            <p class="np-body">En la edición anterior afirmamos que Victorio es «un capo». Corrección: es un capo bastante lindo. Pedimos disculpas por el error de imprenta.</p>
+          </div>
         </div>
 
       </article>
     </section>
 
-    
-<!-- ============ CTA ============ -->
-    <section class="cta reveal" aria-labelledby="cta-title">
-      <h2 id="cta-title" class="cta-title">Mandale carga positiva</h2>
-      <p class="cta-sub">Cada toque suma un +q de buena energía para el examen. Se conserva, como todo en física.</p>
-      <button class="big-btn" id="chargeBtn" type="button">
-        <span class="big-btn-in">⚡ Mandar +q</span>
-      </button>
-      <p class="counter" aria-live="polite"><span id="count">0</span> cargas positivas enviadas</p>
-      <p class="toast" id="toast" aria-live="polite"></p>
+    <!-- ============ 7 · CONCLUSIÓN ============ -->
+    <section class="end" id="end" aria-labelledby="end-title">
+      <header class="sh sh-end">
+        <p class="sh-label"><span class="sh-n">7</span> Conclusión</p>
+        <h2 class="end-title" id="end-title">Hipótesis<br /><span>confirmada.</span></h2>
+        <p class="end-sub">La va a hacer de goma. El laboratorio no tiene más preguntas. Los docentes, tampoco.</p>
+      </header>
+
+      <div class="stampzone">
+        <div class="report" id="report">
+          <p class="report-h"><b>Dictamen final</b><span>Informe N.º 10 · MAT-VIC-001</span></p>
+          <p class="report-l">Ensayo de tracción ............ superado</p>
+          <p class="report-l">Ensayo eléctrico ............. fuera de escala</p>
+          <p class="report-l">Marco teórico ................ 10</p>
+          <p class="report-l">Observaciones ................ (ver aparte)</p>
+          <p class="report-l report-sig">Sello del Comité:</p>
+          <div class="impressions" id="impressions" aria-hidden="true"></div>
+        </div>
+        <button class="stamper" id="stamper" type="button">
+          <span class="stamper-knob" aria-hidden="true"></span>
+          <span class="stamper-neck" aria-hidden="true"></span>
+          <span class="stamper-base"><span>sellar</span><small>sello de goma</small></span>
+        </button>
+      </div>
+      <p class="stamp-msg" id="stampMsg" aria-live="polite">Falta el sello.</p>
+
+      <div class="sign" id="sign">
+        <p class="hand sign-txt">Suerte. Bueno, no la necesitás.<br />Pero por las dudas.</p>
+        <p class="sign-mf">
+          <span class="hand">MF</span>
+          <svg viewBox="0 0 60 54" aria-hidden="true"><path d="M30 50 C 22 42, 4 32, 5 17 C 6 7, 16 3, 23 7 C 27 9, 29 13, 30 16 C 31 12, 34 7, 39 5 C 47 2, 56 8, 55 18 C 54 31, 40 41, 30 50"/></svg>
+        </p>
+      </div>
     </section>
 
   </main>
 
   <footer class="foot">
-    <p class="foot-big">Mucha suerte, Victorio.</p>
-    <p>Hecho con resistencia 0 Ω y muchísimo cariño ⚡ Volvé con el 10.</p>
+    <p class="foot-big">Fin del informe.</p>
+    <button class="again" id="again" type="button">Repetir ensayo <span aria-hidden="true">↑</span></button>
+    <ul class="fine">
+      <li>Ninguna muestra resultó dañada durante este ensayo. La máquina sí.</li>
+      <li>Cualquier parecido con interés personal es pura inducción electromagnética.</li>
+      <li>Comité de Cargas Positivas (1 integrante).</li>
+    </ul>
   </footer>
 
-  <!-- ============ POPUP WIN95 ============ -->
-  <div class="win" id="win" role="dialog" aria-labelledby="win-title" aria-modal="false" hidden>
+  <!-- ============ victorio.exe ============ -->
+  <div class="win" id="win" role="alertdialog" aria-labelledby="win-title" aria-describedby="win-desc" hidden>
     <div class="win-bar">
       <span id="win-title">victorio.exe</span>
       <button class="win-x" type="button" aria-label="Cerrar" data-close>×</button>
     </div>
     <div class="win-body">
-      <div class="win-ico" aria-hidden="true">⚠️</div>
-      <p>Se detectó un nivel de preparación <b>peligrosamente alto</b>.<br />¿Querés seguir aprobando?</p>
+      <svg class="win-ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 L30 28 H2 Z" fill="#FFE14D" stroke="#000" stroke-width="2" stroke-linejoin="round"/><rect x="14.6" y="11" width="2.8" height="9" fill="#000"/><rect x="14.6" y="22.4" width="2.8" height="2.8" fill="#000"/></svg>
+      <p id="win-desc">El instrumento dejó de responder.<br />Motivo: <b>demasiado Victorio</b> para un solo voltímetro.</p>
     </div>
     <div class="win-btns">
-      <button type="button" data-close>Sí</button>
-      <button type="button" data-close>Obvio</button>
+      <button type="button" data-close>Esperar</button>
+      <button type="button" data-close data-yay>Aprobarlo igual</button>
     </div>
   </div>
 
+  <p class="toast" id="toast" role="status" aria-live="polite"></p>
   <div id="fx" aria-hidden="true"></div>
 
   <script src="main.js"></script>
