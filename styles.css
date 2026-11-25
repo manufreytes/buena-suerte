@@ -1337,7 +1337,7 @@ main > section.news { width: min(1140px, 94vw); }
 }
 
 /* =========================================================
-   4 BIS · SIMULACRO DE COLOQUIO
+   2 BIS · SIMULACRO DE COLOQUIO
    ========================================================= */
 .sh-n-bis { width: auto; padding: 0 .45em; border-radius: 1em; gap: .1em; display: inline-flex; align-items: baseline; }
 .sh-n-bis small { font-family: var(--f-mono); font-size: .8em; letter-spacing: .02em; }

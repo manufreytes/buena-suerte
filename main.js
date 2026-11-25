@@ -550,7 +550,7 @@
   }
 
   /* ---------------------------------------------------------
-     4 BIS · SIMULACRO DE COLOQUIO
+     2 BIS · SIMULACRO DE COLOQUIO
      --------------------------------------------------------- */
   const oralVideo = $("#oralVideo"), oralSound = $("#oralSound");
   const muteVideo = (v, btn, label) => {
