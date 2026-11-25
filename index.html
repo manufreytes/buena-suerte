@@ -27,20 +27,54 @@
   <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title" aria-describedby="gate-aviso">
     <div class="gate-stack">
     <p class="aviso hand" id="gate-aviso"><i class="aviso-tape" aria-hidden="true"></i><small>Aviso previo</small>Para vos que estudiás Ing. Civil: te cuento que cuando digo «la muestra» me refiero a vos.</p>
-    <form class="gate-card" id="gateForm">
-      <p class="gate-top"><span>Comité de Cargas Positivas</span><span>C-01</span></p>
-      <h1 class="gate-title" id="gate-title">Consentimiento informado</h1>
-      <p class="gate-lede">Para acceder al Informe N.º 10, la muestra debe aceptar la siguiente declaración:</p>
-      <label class="gate-check">
-        <input type="checkbox" id="gateBox" />
-        <span class="gate-box" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M7 21 L16 30 L34 8"/></svg></span>
-        <span class="gate-txt">Acepto que el puré que me hicieron es <b>el más rico que comí en mi vida.</b></span>
-      </label>
-      <p class="gate-fine">Esta declaración es irrevocable y tiene valor ante la cátedra.</p>
-      <div class="gate-btns">
-        <button class="gate-go" id="gateGo" type="submit" disabled>Ingresar al laboratorio</button>
-        <button class="gate-no" id="gateNo" type="button">No acepto</button>
-      </div>
+    <form class="gate-card" id="gateForm" novalidate>
+      <p class="gate-top"><span>Comité de Cargas Positivas</span><span id="gateStepTag">C-01 · 1/3</span></p>
+      <div class="gate-dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+
+      <!-- paso 1: puré -->
+      <fieldset class="step is-on" data-step="1">
+        <legend class="gate-title" id="gate-title">Consentimiento informado</legend>
+        <p class="gate-lede">Para acceder al Informe N.º 10, la muestra debe aceptar la siguiente declaración:</p>
+        <label class="gate-check">
+          <input type="checkbox" class="step-box" />
+          <span class="gate-box" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M7 21 L16 30 L34 8"/></svg></span>
+          <span class="gate-txt">Acepto que el puré que me hicieron es <b>el más rico que comí en mi vida.</b></span>
+        </label>
+        <p class="gate-fine">Esta declaración es irrevocable y tiene valor ante la cátedra.</p>
+        <div class="gate-btns">
+          <button class="gate-go step-next" type="button" disabled>Siguiente</button>
+          <button class="gate-no step-dodge" type="button">No acepto</button>
+        </div>
+      </fieldset>
+
+      <!-- paso 2: la fuercita -->
+      <fieldset class="step" data-step="2" hidden>
+        <legend class="gate-title">Declaración jurada</legend>
+        <p class="gate-lede">Con respecto a la pulseada (fuercita) disputada recientemente, la muestra declara:</p>
+        <p class="gate-q">¿Manu te ganó oficialmente en la fuercita?</p>
+        <div class="vs" id="vs">
+          <button class="vs-btn vs-yes step-next" type="button">Sí, me ganó</button>
+          <button class="vs-btn vs-no" id="vsNo" type="button">No</button>
+        </div>
+        <p class="gate-fine">El resultado será informado a la Federación de Fuercita.</p>
+      </fieldset>
+
+      <!-- paso 3: Manu -->
+      <fieldset class="step" data-step="3" hidden>
+        <legend class="gate-title">Última instancia</legend>
+        <p class="gate-lede">Para finalizar el trámite, la muestra debe aceptar:</p>
+        <label class="gate-check">
+          <input type="checkbox" class="step-box" />
+          <span class="gate-box" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M7 21 L16 30 L34 8"/></svg></span>
+          <span class="gate-txt">Acepto que <b>Manu es más lindo que yo.</b></span>
+        </label>
+        <p class="gate-fine">Firmado bajo presión. Igual es verdad.</p>
+        <div class="gate-btns">
+          <button class="gate-go" id="gateGo" type="submit" disabled>Ingresar al laboratorio</button>
+          <button class="gate-no step-dodge" type="button">No acepto</button>
+        </div>
+      </fieldset>
+
       <p class="gate-msg" id="gateMsg" aria-live="polite"></p>
       <p class="hand gate-note" aria-hidden="true">(no hay otra opción)</p>
     </form>

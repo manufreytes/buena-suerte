@@ -1634,3 +1634,30 @@ html:not(.js) .gate { display: none; }
 .aviso-tape { position: absolute; left: 50%; top: -14px; width: 110px; height: 30px; margin-left: -55px; background: rgba(255, 246, 236, .6); rotate: -4deg; clip-path: polygon(3% 0, 97% 4%, 100% 50%, 96% 100%, 2% 96%, 0 50%); }
 @keyframes avisoIn { from { transform: translateY(-40px) rotate(-10deg); opacity: 0; } }
 .gate.closing .aviso { animation: gateOut .6s cubic-bezier(.5, 0, .8, .3) forwards; }
+
+/* pasos del consentimiento */
+.step { border: 0; margin: 0; padding: 0; min-width: 0; }
+.step[hidden] { display: none; }
+.step legend { padding: 0; float: left; width: 100%; margin-bottom: .55rem; }
+.step legend + * { clear: both; }
+.gate-dots { display: flex; gap: .4rem; margin: -.4rem 0 .9rem; }
+.gate-dots i { width: 26px; height: 8px; border: 2px solid var(--ink); background: transparent; transition: background .3s; }
+.gate-dots i.on { background: var(--goma); }
+.gate-card.flip-in .step.is-on { animation: stepIn .45s var(--snap); }
+@keyframes stepIn { from { opacity: 0; transform: translateX(40px) rotate(2deg); } }
+.gate-q { font-family: var(--f-display); font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.1rem); line-height: 1; margin: .2rem 0 1.2rem; color: var(--goma-deep); text-wrap: balance; }
+.vs { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; min-height: 4.4rem; }
+.vs-btn {
+  font-family: var(--f-display); font-size: clamp(1.3rem, 1rem + 1vw, 1.7rem);
+  color: var(--ink); background: var(--papel);
+  border: 3px solid var(--ink); box-shadow: 0 6px 0 var(--ink);
+  padding: .7rem .6rem .8rem;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s;
+}
+.vs-yes { background: var(--alerta); }
+.vs-yes:hover { transform: translateY(-2px) rotate(-1.5deg); }
+.vs-yes:active { transform: translateY(5px); box-shadow: 0 1px 0 var(--ink); }
+.vs-no { background: #FFD6E4; position: relative; z-index: 2; transition: transform .28s var(--spring), opacity .2s; touch-action: none; }
+.vs-no.fled { cursor: not-allowed; }
+.vs-btn:focus-visible { outline: 3px dashed var(--goma-deep); outline-offset: 4px; }

@@ -453,41 +453,105 @@
     if (!gate) { openPage(); return; }
     document.documentElement.classList.add("gated");
     gate.classList.add("open");
-    setTimeout(() => $("#gateBox").focus({ preventScroll: true }), 350);
+    setTimeout(() => { const f = $(".step.is-on .step-box"); if (f) f.focus({ preventScroll: true }); }, 350);
   }
   if (gate) {
-    const box = $("#gateBox"), go = $("#gateGo"), no = $("#gateNo"), msg = $("#gateMsg"), card = $(".gate-card");
-    box.addEventListener("change", () => {
-      go.disabled = !box.checked;
-      gate.classList.toggle("ok", box.checked);
-      if (box.checked) { msg.textContent = "Correcto. Muy bien."; boing(0.7); }
-      else msg.textContent = "Volvé a tildarla. Sabés que es verdad.";
-    });
-    const noMsgs = ["Opción no disponible.", "Esa opción está en mantenimiento.", "El Comité no reconoce esa respuesta.", "Ok, pero no.", "Seguís intentando. Igual el puré estaba rico."];
-    let noN = 0;
-    const dodge = () => {
-      msg.textContent = noMsgs[Math.min(noN, noMsgs.length - 1)];
-      noN++;
-      card.classList.remove("nope"); void card.offsetWidth; card.classList.add("nope");
-      zap();
-      if (!reduceMotion) {
-        const r = card.getBoundingClientRect();
-        no.style.transform = `translate(${rand(-0.12, 0.12) * r.width}px, ${rand(-36, 24)}px) rotate(${rand(-12, 12)}deg)`;
-      }
-      if (noN >= 3) no.textContent = noN >= 5 ? "Bueno, sí acepto" : "No acepto (?)";
-      if (noN >= 5) { no.classList.add("flip"); no.style.transform = "rotate(-3deg)"; }
+    const form = $("#gateForm"), msg = $("#gateMsg"), card = $(".gate-card");
+    const steps = $$(".step", form), dots = $$(".gate-dots i", form), tag = $("#gateStepTag");
+    let cur = 0;
+    const shake = () => { card.classList.remove("nope"); void card.offsetWidth; card.classList.add("nope"); };
+    const okMsgs = ["Correcto. Muy bien.", "Gracias por tu honestidad.", "Lo sabíamos."];
+
+    const goTo = (i) => {
+      steps[cur].hidden = true; steps[cur].classList.remove("is-on");
+      cur = i;
+      steps[cur].hidden = false; steps[cur].classList.add("is-on");
+      dots.forEach((d, k) => d.classList.toggle("on", k <= cur));
+      tag.textContent = `C-0${cur + 1} · ${cur + 1}/3`;
+      gate.classList.remove("ok");
+      msg.textContent = "";
+      card.classList.remove("flip-in"); void card.offsetWidth; card.classList.add("flip-in");
+      thud(false);
+      const first = $(".step-box, .vs-yes", steps[cur]);
+      if (first) setTimeout(() => first.focus({ preventScroll: true }), 200);
     };
-    no.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && !no.classList.contains("flip")) dodge(); });
-    no.addEventListener("click", () => {
-      if (no.classList.contains("flip")) { box.checked = true; box.dispatchEvent(new Event("change")); return; }
-      dodge();
+
+    // casillas: habilitan el botón de su paso
+    steps.forEach((st, i) => {
+      const box = $(".step-box", st), next = $(".gate-go", st);
+      if (!box) return;
+      box.addEventListener("change", () => {
+        next.disabled = !box.checked;
+        gate.classList.toggle("ok", box.checked);
+        msg.textContent = box.checked ? okMsgs[Math.min(i, okMsgs.length - 1)] : "Volvé a tildarla. Sabés que es verdad.";
+        if (box.checked) boing(0.7);
+      });
     });
-    $("#gateForm").addEventListener("submit", (e) => {
+    $$(".step-next", form).forEach((btn) => btn.addEventListener("click", () => {
+      if (btn.disabled) return;
+      if (btn.classList.contains("vs-yes")) { msg.textContent = "Registrado. La Federación agradece tu humildad."; boing(1); }
+      const r = btn.getBoundingClientRect();
+      burst(r.left + r.width / 2, r.top + r.height / 2, { n: 10 });
+      setTimeout(() => goTo(cur + 1), btn.classList.contains("vs-yes") ? 650 : 120);
+    }));
+
+    // "No acepto" de los pasos con casilla: se escapa y termina aceptando
+    const noMsgs = ["Opción no disponible.", "Esa opción está en mantenimiento.", "El Comité no reconoce esa respuesta.", "Ok, pero no.", "Seguís intentando. Igual es verdad."];
+    $$(".step-dodge", form).forEach((no) => {
+      let n = 0;
+      const dodge = () => {
+        msg.textContent = noMsgs[Math.min(n, noMsgs.length - 1)];
+        n++; shake(); zap();
+        if (!reduceMotion) {
+          const r = card.getBoundingClientRect();
+          no.style.transform = `translate(${rand(-0.12, 0.12) * r.width}px, ${rand(-36, 24)}px) rotate(${rand(-12, 12)}deg)`;
+        }
+        if (n >= 3) no.textContent = n >= 5 ? "Bueno, sí acepto" : "No acepto (?)";
+        if (n >= 5) { no.classList.add("flip"); no.style.transform = "rotate(-3deg)"; }
+      };
+      no.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && !no.classList.contains("flip")) dodge(); });
+      no.addEventListener("click", () => {
+        if (no.classList.contains("flip")) {
+          const box = $(".step-box", no.closest(".step"));
+          box.checked = true; box.dispatchEvent(new Event("change"));
+          return;
+        }
+        dodge();
+      });
+    });
+
+    // la fuercita: el "No" está al mismo nivel... pero no se deja apretar
+    const vs = $("#vs"), vsNo = $("#vsNo");
+    if (vs && vsNo) {
+      const fMsgs = ["Ese botón no está habilitado para vos.", "Manu dice que no.", "La Federación revisó el video: perdiste.", "Inútil. Te ganó.", "Bueno, ya está. Te ganó."];
+      let fn = 0;
+      const flee = (e) => {
+        if (e) e.preventDefault();
+        msg.textContent = fMsgs[Math.min(fn, fMsgs.length - 1)];
+        fn++; zap(); shake();
+        vsNo.classList.add("fled");
+        if (!reduceMotion) {
+          const rw = vs.clientWidth, bw = vsNo.offsetWidth;
+          const x = rand(-rw * 0.5, rw * 0.05);
+          const y = rand(-90, -10);
+          vsNo.style.transform = `translate(${x}px, ${y}px) rotate(${rand(-18, 18)}deg) scale(${Math.max(0.45, 1 - fn * 0.11)})`;
+        } else {
+          vsNo.style.opacity = String(Math.max(0.25, 1 - fn * 0.2));
+        }
+        if (fn === 3) vsNo.textContent = "No (?)";
+        if (fn === 5) vsNo.textContent = "no";
+      };
+      vsNo.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") flee(); });
+      vsNo.addEventListener("pointerdown", flee);
+      vsNo.addEventListener("click", (e) => { e.preventDefault(); if (e.detail === 0) flee(); });
+    }
+
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
-      if (!box.checked) return;
+      if ($("#gateGo").disabled) return;
       gate.classList.add("closing");
       thud(true);
-      const r = go.getBoundingClientRect();
+      const r = $("#gateGo").getBoundingClientRect();
       burst(r.left + r.width / 2, r.top + r.height / 2, { n: 18 });
       setTimeout(() => {
         gate.classList.remove("open", "closing");
