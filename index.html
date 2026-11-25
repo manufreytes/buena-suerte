@@ -24,7 +24,9 @@
   <a class="skip" href="#s1">Saltar al informe</a>
 
   <!-- ============ CONSENTIMIENTO ============ -->
-  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title" aria-describedby="gate-aviso">
+    <div class="gate-stack">
+    <p class="aviso hand" id="gate-aviso"><i class="aviso-tape" aria-hidden="true"></i><small>Aviso previo</small>Para vos que estudiás Ing. Civil: te cuento que cuando digo «la muestra» me refiero a vos.</p>
     <form class="gate-card" id="gateForm">
       <p class="gate-top"><span>Comité de Cargas Positivas</span><span>C-01</span></p>
       <h1 class="gate-title" id="gate-title">Consentimiento informado</h1>
@@ -42,6 +44,7 @@
       <p class="gate-msg" id="gateMsg" aria-live="polite"></p>
       <p class="hand gate-note" aria-hidden="true">(no hay otra opción)</p>
     </form>
+    </div>
   </div>
 
   <!-- ============ CARGA ============ -->

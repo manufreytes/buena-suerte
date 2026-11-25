@@ -1615,3 +1615,22 @@ html:not(.js) .gate { display: none; }
   .gate-go { width: 100%; }
   .gate-note { bottom: -2.8rem; font-size: 1.7rem; }
 }
+
+/* aviso previo (post-it sobre el consentimiento) */
+.gate-stack { width: min(560px, 100%); display: grid; justify-items: center; padding: 1.4rem 0 3.4rem; }
+.aviso {
+  position: relative; z-index: 2;
+  width: min(380px, 92%);
+  margin-bottom: -1.1rem;
+  background: var(--alerta); color: var(--ink);
+  padding: 1.5rem 1.3rem 1.3rem;
+  font-size: clamp(1.75rem, 1.4rem + 1vw, 2.15rem); line-height: 1;
+  text-align: center;
+  box-shadow: 4px 6px 0 rgba(0, 0, 0, .35);
+  transform: rotate(2.5deg);
+  animation: avisoIn .55s var(--snap) .15s both;
+}
+.aviso small { display: block; font-family: var(--f-mono); font-size: .55em; text-transform: uppercase; letter-spacing: .08em; color: var(--goma-deep); margin-bottom: .35rem; }
+.aviso-tape { position: absolute; left: 50%; top: -14px; width: 110px; height: 30px; margin-left: -55px; background: rgba(255, 246, 236, .6); rotate: -4deg; clip-path: polygon(3% 0, 97% 4%, 100% 50%, 96% 100%, 2% 96%, 0 50%); }
+@keyframes avisoIn { from { transform: translateY(-40px) rotate(-10deg); opacity: 0; } }
+.gate.closing .aviso { animation: gateOut .6s cubic-bezier(.5, 0, .8, .3) forwards; }
