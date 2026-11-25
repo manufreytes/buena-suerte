@@ -132,12 +132,12 @@
           <div class="yp-frame">
             <span class="yp-live" aria-hidden="true"><i class="dot"></i> REC</span>
             <video id="ypVideo" src="video/yo-puedo.mp4" poster="video/yo-puedo-poster.jpg"
-                   muted loop playsinline preload="metadata"
+                   loop playsinline preload="none"
                    aria-label="Victorio diciendo: yo puedo"></video>
             <p class="yp-sub" aria-hidden="true">—¡Yo puedo!</p>
-            <button class="yp-sound" id="ypSound" type="button" aria-pressed="false">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path class="snd-body" d="M3 9h4l5-4v14l-5-4H3z"/><path class="snd-on" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/><path class="snd-off" d="M16 9l5 6M21 9l-5 6"/></svg>
-              <span class="yp-sound-txt">escuchar la declaración</span>
+            <button class="play" type="button" data-video="ypVideo" aria-label="Reproducir la declaración">
+              <span class="play-ico" aria-hidden="true"></span>
+              <span class="play-txt">reproducir declaración</span>
             </button>
           </div>
           <p class="yp-shout" aria-hidden="true"><span>¡Yo</span><span>puedo!</span></p>
@@ -201,14 +201,14 @@
         <figure class="tv" data-reveal="power">
           <div class="tv-screen">
             <video id="oralVideo" src="video/coloquio.mp4" poster="video/coloquio-poster.jpg"
-                   muted loop playsinline preload="metadata"
+                   loop playsinline preload="none"
                    aria-label="Victorio, con una toalla en la cabeza y un collar de perlas, explicando Física 2"></video>
             <i class="tv-scan" aria-hidden="true"></i>
             <span class="tv-live" aria-hidden="true"><i class="dot"></i> en vivo<span class="hide-m"> · canal de la cátedra</span></span>
             <p class="tv-chyron" aria-hidden="true"><b>Física II</b><span>Explica sin apuntes</span></p>
-            <button class="yp-sound tv-sound" id="oralSound" type="button" aria-pressed="false">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path class="snd-body" d="M3 9h4l5-4v14l-5-4H3z"/><path class="snd-on" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/><path class="snd-off" d="M16 9l5 6M21 9l-5 6"/></svg>
-              <span class="yp-sound-txt">escuchar la exposición</span>
+            <button class="play" type="button" data-video="oralVideo" aria-label="Reproducir la exposición">
+              <span class="play-ico" aria-hidden="true"></span>
+              <span class="play-txt">ver la exposición</span>
             </button>
           </div>
           <div class="tv-bottom" aria-hidden="true"><span>Cátedra-Visión</span><i class="knob"></i><i class="knob"></i></div>
@@ -297,7 +297,7 @@
         <div class="grade" aria-label="Nota: 10, felicitaciones">
           <svg viewBox="0 0 160 130" aria-hidden="true"><path d="M86 10 C 30 6, 6 40, 12 74 C 18 110, 70 124, 112 110 C 150 96, 156 50, 132 26 C 116 10, 92 6, 70 12"/></svg>
           <span class="hand grade-n">10</span>
-          <span class="hand grade-sub">felicitaciones.<br />no se agrande.</span>
+          <span class="hand grade-sub">felicitaciones.<br />no te vayas a agrandar.</span>
         </div>
       </div>
     </section>
@@ -443,7 +443,7 @@
       <p class="stamp-msg" id="stampMsg" aria-live="polite">Falta el sello.</p>
 
       <div class="sign" id="sign">
-        <p class="hand sign-txt">Suerte. Bueno, no la necesitás.<br />Pero por las dudas.</p>
+        <p class="hand sign-txt">Suerte, lindo. Bueno, no la necesitás.<br />Pero por las dudas.</p>
         <p class="sign-mf">
           <span class="hand">MF</span>
           <svg viewBox="0 0 60 54" aria-hidden="true"><path d="M30 50 C 22 42, 4 32, 5 17 C 6 7, 16 3, 23 7 C 27 9, 29 13, 30 16 C 31 12, 34 7, 39 5 C 47 2, 56 8, 55 18 C 54 31, 40 41, 30 50"/></svg>

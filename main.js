@@ -514,71 +514,55 @@
   }
 
   /* ---------------------------------------------------------
-     1 · VIDEO · YO PUEDO
+     VIDEOS — se reproducen solo cuando los tocás (con sonido)
+     En el celu el autoplay muteado fallaba o se trababa.
      --------------------------------------------------------- */
-  const yp = $("#yopuedo"), ypVideo = $("#ypVideo"), ypSound = $("#ypSound");
+  const yp = $("#yopuedo"), ypVideo = $("#ypVideo");
+  const popYp = () => { if (!yp) return; yp.classList.remove("pop"); void yp.offsetWidth; yp.classList.add("pop"); };
+  const players = $$(".play").map((btn) => {
+    const v = document.getElementById(btn.dataset.video);
+    const txt = $(".play-txt", btn);
+    return { btn, v, host: btn.parentElement, txt, label: txt.textContent, aria: btn.getAttribute("aria-label") };
+  }).filter((P) => P.v);
+
+  const setState = (P, st) => {
+    P.host.classList.toggle("is-playing", st === "playing");
+    P.host.classList.toggle("is-loading", st === "loading");
+    P.host.classList.toggle("is-error", st === "error");
+    P.txt.textContent = st === "loading" ? "cargando…" : st === "error" ? "no cargó · tocá de nuevo" : P.label;
+    P.btn.setAttribute("aria-label", st === "playing" ? "Pausar" : P.aria);
+  };
+
+  players.forEach((P) => {
+    P.v.muted = false;
+    P.btn.addEventListener("click", (e) => {
+      if (!P.v.paused) { P.v.pause(); return; }
+      players.forEach((o) => { if (o !== P && !o.v.paused) o.v.pause(); });
+      setState(P, "loading");
+      const pr = P.v.play();
+      if (pr && pr.catch) pr.catch(() => setState(P, "error"));
+      burst(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, { n: 10 });
+    });
+    P.v.addEventListener("playing", () => { setState(P, "playing"); if (P.v === ypVideo) popYp(); });
+    P.v.addEventListener("waiting", () => { if (!P.v.paused) setState(P, "loading"); });
+    P.v.addEventListener("pause", () => setState(P, "paused"));
+    P.v.addEventListener("error", () => setState(P, "error"));
+    // si te vas, se pausa
+    new IntersectionObserver(([e]) => { if (!e.isIntersecting && !P.v.paused) P.v.pause(); }, { threshold: 0 }).observe(P.v);
+  });
+
   if (ypVideo) {
-    const pop = () => { yp.classList.remove("pop"); void yp.offsetWidth; yp.classList.add("pop"); };
+    // rebota el título cada vez que el video vuelve a empezar
     let lastT = 0;
     ypVideo.addEventListener("timeupdate", () => {
       if (ypVideo.currentTime < lastT - 1) {
-        pop();
-        if (!ypVideo.muted) {
-          const r = ypVideo.getBoundingClientRect();
-          burst(r.left + r.width / 2, r.top + r.height * 0.3, { n: 10 });
-        }
+        popYp();
+        const r = ypVideo.getBoundingClientRect();
+        burst(r.left + r.width / 2, r.top + r.height * 0.3, { n: 8 });
       }
       lastT = ypVideo.currentTime;
     });
-    new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { if (!reduceMotion || !ypVideo.muted) ypVideo.play().catch(() => {}); pop(); }
-      else ypVideo.pause();
-    }, { threshold: 0.3 }).observe(ypVideo);
-
-    ypSound.addEventListener("click", (e) => {
-      const on = ypVideo.muted;
-      ypVideo.muted = !on;
-      ypSound.setAttribute("aria-pressed", String(on));
-      $(".yp-sound-txt", ypSound).textContent = on ? "sonando" : "escuchar la declaración";
-      if (on) {
-        ypVideo.currentTime = 0;
-        ypVideo.play().catch(() => {});
-        pop();
-        burst(e.clientX, e.clientY, { n: 14 });
-      }
-    });
-  }
-
-  /* ---------------------------------------------------------
-     2 BIS · SIMULACRO DE COLOQUIO
-     --------------------------------------------------------- */
-  const oralVideo = $("#oralVideo"), oralSound = $("#oralSound");
-  const muteVideo = (v, btn, label) => {
-    if (!v || v.muted) return;
-    v.muted = true;
-    btn.setAttribute("aria-pressed", "false");
-    $(".yp-sound-txt", btn).textContent = label;
-  };
-  if (oralVideo) {
-    new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { if (!reduceMotion || !oralVideo.muted) oralVideo.play().catch(() => {}); }
-      else oralVideo.pause();
-    }, { threshold: 0.3 }).observe(oralVideo);
-    oralSound.addEventListener("click", (e) => {
-      const on = oralVideo.muted;
-      if (on && ypVideo) muteVideo(ypVideo, ypSound, "escuchar la declaración");
-      oralVideo.muted = !on;
-      oralSound.setAttribute("aria-pressed", String(on));
-      $(".yp-sound-txt", oralSound).textContent = on ? "exponiendo" : "escuchar la exposición";
-      if (on) {
-        oralVideo.currentTime = 0;
-        oralVideo.play().catch(() => {});
-        burst(e.clientX, e.clientY, { n: 12 });
-      }
-    });
-  }
-  if (ypSound && oralVideo) {
-    ypSound.addEventListener("click", () => { if (!ypVideo.muted) muteVideo(oralVideo, oralSound, "escuchar la exposición"); });
+    if (yp) new IntersectionObserver(([e], obs) => { if (e.isIntersecting) { popYp(); obs.disconnect(); } }, { threshold: 0.4 }).observe(yp);
   }
 
   // la rúbrica se corrige de a un ítem
