@@ -445,9 +445,57 @@
      CARGA — espera las tipografías y suelta las letras
      --------------------------------------------------------- */
   const loader = $("#loader");
+  // consentimiento: la página arranca recién cuando acepta lo del puré
+  const gate = $("#gate");
+  function openPage() { setTimeout(dropLetters, reduceMotion ? 0 : 180); }
   function startShow() {
     if (loader) loader.classList.add("done");
-    setTimeout(dropLetters, reduceMotion ? 0 : 180);
+    if (!gate) { openPage(); return; }
+    document.documentElement.classList.add("gated");
+    gate.classList.add("open");
+    setTimeout(() => $("#gateBox").focus({ preventScroll: true }), 350);
+  }
+  if (gate) {
+    const box = $("#gateBox"), go = $("#gateGo"), no = $("#gateNo"), msg = $("#gateMsg"), card = $(".gate-card");
+    box.addEventListener("change", () => {
+      go.disabled = !box.checked;
+      gate.classList.toggle("ok", box.checked);
+      if (box.checked) { msg.textContent = "Correcto. Muy bien."; boing(0.7); }
+      else msg.textContent = "Volvé a tildarla. Sabés que es verdad.";
+    });
+    const noMsgs = ["Opción no disponible.", "Esa opción está en mantenimiento.", "El Comité no reconoce esa respuesta.", "Ok, pero no.", "Seguís intentando. Igual el puré estaba rico."];
+    let noN = 0;
+    const dodge = () => {
+      msg.textContent = noMsgs[Math.min(noN, noMsgs.length - 1)];
+      noN++;
+      card.classList.remove("nope"); void card.offsetWidth; card.classList.add("nope");
+      zap();
+      if (!reduceMotion) {
+        const r = card.getBoundingClientRect();
+        no.style.transform = `translate(${rand(-0.12, 0.12) * r.width}px, ${rand(-36, 24)}px) rotate(${rand(-12, 12)}deg)`;
+      }
+      if (noN >= 3) no.textContent = noN >= 5 ? "Bueno, sí acepto" : "No acepto (?)";
+      if (noN >= 5) { no.classList.add("flip"); no.style.transform = "rotate(-3deg)"; }
+    };
+    no.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse" && !no.classList.contains("flip")) dodge(); });
+    no.addEventListener("click", () => {
+      if (no.classList.contains("flip")) { box.checked = true; box.dispatchEvent(new Event("change")); return; }
+      dodge();
+    });
+    $("#gateForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (!box.checked) return;
+      gate.classList.add("closing");
+      thud(true);
+      const r = go.getBoundingClientRect();
+      burst(r.left + r.width / 2, r.top + r.height / 2, { n: 18 });
+      setTimeout(() => {
+        gate.classList.remove("open", "closing");
+        gate.hidden = true;
+        document.documentElement.classList.remove("gated");
+        openPage();
+      }, reduceMotion ? 0 : 650);
+    });
   }
   if (loader && !reduceMotion) {
     const band = $(".loader-band i", loader), pct = $("#loaderPct");

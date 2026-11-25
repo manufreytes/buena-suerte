@@ -1522,3 +1522,96 @@ main > section.news { width: min(1140px, 94vw); }
 }
 .tv-screen .play { align-content: end; padding-bottom: 28%; }
 .yp-frame .play { align-content: end; padding-bottom: 30%; }
+
+/* =========================================================
+   CONSENTIMIENTO (pantalla de entrada)
+   ========================================================= */
+html.gated, html.gated body { overflow: hidden; }
+.gate {
+  position: fixed; inset: 0; z-index: 95;
+  display: none; place-items: center;
+  padding: 1.2rem;
+  background:
+    linear-gradient(rgba(61, 245, 255, .06) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, rgba(61, 245, 255, .06) 1px, transparent 1px) 0 0 / 48px 48px,
+    var(--ink);
+  overflow-y: auto;
+}
+.gate.open { display: grid; }
+html:not(.js) .gate { display: none; }
+.gate-card {
+  position: relative;
+  width: min(560px, 100%);
+  background: var(--papel); color: var(--ink);
+  border: 3px solid var(--ink);
+  box-shadow: 12px 12px 0 var(--goma), 12px 12px 0 3px var(--ink);
+  padding: clamp(1.3rem, 4vw, 2.4rem);
+  transform: rotate(-1.2deg);
+  animation: gateIn .6s var(--snap) both;
+}
+@keyframes gateIn { from { transform: translateY(-60px) rotate(-8deg) scale(1.05); opacity: 0; } }
+.gate.closing .gate-card { animation: gateOut .6s cubic-bezier(.5, 0, .8, .3) forwards; }
+.gate.closing { transition: opacity .35s .3s; opacity: 0; }
+@keyframes gateOut { 30% { transform: rotate(-3deg) scale(1.04); } to { transform: translateY(120vh) rotate(18deg); } }
+.gate-card.nope { animation: gateNope .35s ease-in-out; }
+@keyframes gateNope { 25% { transform: translateX(-8px) rotate(-2deg); } 75% { transform: translateX(8px) rotate(-.4deg); } }
+.gate-top {
+  display: flex; justify-content: space-between; gap: 1rem;
+  font-family: var(--f-mono); font-size: 1.1rem; text-transform: uppercase; letter-spacing: .05em;
+  border-bottom: 2px solid var(--ink); padding-bottom: .4rem; margin-bottom: 1rem;
+}
+.gate-top span:last-child { color: var(--goma-deep); white-space: nowrap; }
+@media (max-width: 640px) { .gate-top { font-size: .98rem; } }
+.gate-title { font-family: var(--f-display); font-size: clamp(2.1rem, 1.3rem + 3.6vw, 3.4rem); line-height: .92; letter-spacing: -.02em; }
+.gate-lede { margin: .9rem 0 1.2rem; font-weight: 600; line-height: 1.3; }
+.gate-check {
+  display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: center;
+  padding: 1rem; cursor: pointer;
+  border: 3px dashed var(--ink);
+  background: rgba(255, 111, 163, .08);
+  transition: background .2s, border-color .2s;
+}
+.gate.ok .gate-check { border-style: solid; background: rgba(255, 225, 77, .35); }
+.gate-check input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.gate-box {
+  width: 46px; height: 46px; display: grid; place-items: center;
+  border: 3px solid var(--ink); background: #fff;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform .2s var(--spring);
+}
+.gate-box svg { width: 40px; height: 40px; fill: none; stroke: var(--lapicera); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 50; stroke-dashoffset: 50; transition: stroke-dashoffset .35s ease-out; }
+.gate-check input:checked + .gate-box { transform: rotate(-6deg) scale(1.08); }
+.gate-check input:checked + .gate-box svg { stroke-dashoffset: 0; }
+.gate-check input:focus-visible + .gate-box { outline: 3px dashed var(--goma-deep); outline-offset: 4px; }
+.gate-txt { font-size: clamp(1.1rem, 1rem + .5vw, 1.35rem); line-height: 1.25; }
+.gate-txt b { font-family: var(--f-display); font-weight: 400; color: var(--goma-deep); }
+.gate-fine { margin-top: .7rem; font-family: var(--f-mono); font-size: 1rem; opacity: .6; }
+.gate-btns { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.4rem; margin-top: 1.4rem; }
+.gate-go {
+  font-family: var(--f-display); font-size: clamp(1.2rem, 1rem + .8vw, 1.5rem);
+  color: var(--ink); background: var(--goma);
+  border: 3px solid var(--ink); box-shadow: 0 6px 0 var(--ink);
+  padding: .55rem 1.2rem .65rem;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s, background .2s, opacity .2s;
+}
+.gate-go:hover:not(:disabled) { transform: translateY(-2px) rotate(-1.5deg); }
+.gate-go:active:not(:disabled) { transform: translateY(5px); box-shadow: 0 1px 0 var(--ink); }
+.gate-go:disabled { background: #D9D2CB; color: rgba(23, 10, 51, .45); cursor: not-allowed; box-shadow: 0 6px 0 rgba(23, 10, 51, .35); }
+.gate.ok .gate-go { animation: jelly 1.6s var(--spring) infinite; }
+.gate-go:focus-visible, .gate-no:focus-visible { outline: 3px dashed var(--goma-deep); outline-offset: 4px; }
+.gate-no {
+  font-family: var(--f-mono); font-size: 1.2rem; text-transform: uppercase;
+  background: none; border: 0; padding: .2rem;
+  color: rgba(23, 10, 51, .6); text-decoration: underline;
+  cursor: pointer;
+  transition: transform .35s var(--spring), color .2s;
+}
+.gate-no.flip { color: var(--goma-deep); font-weight: 700; }
+.gate-msg { min-height: 1.4em; margin-top: .9rem; font-family: var(--f-mono); font-size: 1.25rem; color: var(--goma-deep); }
+.gate-note { position: absolute; right: -.4rem; bottom: -3rem; color: var(--alerta); font-size: 1.9rem; rotate: -5deg; }
+@media (max-width: 640px) {
+  .gate-card { box-shadow: 8px 8px 0 var(--goma), 8px 8px 0 3px var(--ink); }
+  .gate-go { width: 100%; }
+  .gate-note { bottom: -2.8rem; font-size: 1.7rem; }
+}

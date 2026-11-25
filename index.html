@@ -23,6 +23,27 @@
 
   <a class="skip" href="#s1">Saltar al informe</a>
 
+  <!-- ============ CONSENTIMIENTO ============ -->
+  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+    <form class="gate-card" id="gateForm">
+      <p class="gate-top"><span>Comité de Cargas Positivas</span><span>C-01</span></p>
+      <h1 class="gate-title" id="gate-title">Consentimiento informado</h1>
+      <p class="gate-lede">Para acceder al Informe N.º 10, la muestra debe aceptar la siguiente declaración:</p>
+      <label class="gate-check">
+        <input type="checkbox" id="gateBox" />
+        <span class="gate-box" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M7 21 L16 30 L34 8"/></svg></span>
+        <span class="gate-txt">Acepto que el puré que me hicieron es <b>el más rico que comí en mi vida.</b></span>
+      </label>
+      <p class="gate-fine">Esta declaración es irrevocable y tiene valor ante la cátedra.</p>
+      <div class="gate-btns">
+        <button class="gate-go" id="gateGo" type="submit" disabled>Ingresar al laboratorio</button>
+        <button class="gate-no" id="gateNo" type="button">No acepto</button>
+      </div>
+      <p class="gate-msg" id="gateMsg" aria-live="polite"></p>
+      <p class="hand gate-note" aria-hidden="true">(no hay otra opción)</p>
+    </form>
+  </div>
+
   <!-- ============ CARGA ============ -->
   <div class="loader" id="loader" aria-hidden="true">
     <p class="loader-line">Preparando muestra <b>MAT-VIC-001</b></p>
